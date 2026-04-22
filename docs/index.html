@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能训练题库 - 练习答题</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .header .subtitle {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      height: 8px;
+      margin-top: 16px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: white;
+      border-radius: 8px;
+      transition: width 0.3s ease;
+    }
+
+    /* Navigation */
+    .nav-section {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn.primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .nav-btn.primary:hover {
+      background: #5a6fd6;
+    }
+
+    .nav-btn.secondary {
+      background: white;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .nav-btn.secondary:hover {
+      background: #f5f5f5;
+    }
+
+    .jump-input {
+      padding: 10px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 100px;
+    }
+
+    .jump-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .page-info {
+      font-size: 14px;
+      color: #666;
+      margin-left: auto;
+    }
+
+    /* Question Card */
+    .question-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .question-type {
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .question-number {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .question-content {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 2px solid #eee;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-item:hover {
+      border-color: #667eea;
+      background: #f8f7ff;
+    }
+
+    .option-item.selected {
+      border-color: #667eea;
+      background: #f0edff;
+    }
+
+    .option-item.correct {
+      border-color: #52c41a;
+      background: #f6ffed;
+    }
+
+    .option-item.wrong {
+      border-color: #ff4d4f;
+      background: #fff2f0;
+    }
+
+    .option-item.disabled {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ddd;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      transition: all 0.2s;
+    }
+
+    .option-item.selected .option-radio {
+      border-color: #667eea;
+    }
+
+    .option-item.selected .option-radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: #667eea;
+      border-radius: 50%;
+    }
+
+    .option-item.correct .option-radio {
+      border-color: #52c41a;
+      background: #52c41a;
+    }
+
+    .option-item.correct .option-radio::after {
+      content: '✓';
+      color: white;
+      font-size: 12px;
+    }
+
+    .option-item.wrong .option-radio {
+      border-color: #ff4d4f;
+      background: #ff4d4f;
+    }
+
+    .option-item.wrong .option-radio::after {
+      content: '✗';
+      color: white;
+      font-size: 12px;
+    }
+
+    /* Multi-select checkbox style */
+    .option-item.multiselect .option-radio {
+      border-radius: 4px;
+    }
+
+    .option-item.multiselect.selected .option-radio::after {
+      content: '✓';
+      width: 12px;
+      height: 12px;
+      background: #667eea;
+      border-radius: 3px;
+    }
+
+    .option-item.correct.multiselect .option-radio::after {
+      background: #52c41a;
+    }
+
+    .option-item.wrong.multiselect .option-radio::after {
+      background: #ff4d4f;
+    }
+
+    .option-text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* Action Buttons */
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn.submit {
+      background: #667eea;
+      color: white;
+    }
+
+    .action-btn.submit:hover {
+      background: #5a6fd6;
+    }
+
+    .action-btn.submit:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .action-btn.next {
+      background: #52c41a;
+      color: white;
+    }
+
+    .action-btn.next:hover {
+      background: #3cb018;
+    }
+
+    .action-btn.next:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Answer Card */
+    .answer-section {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .answer-section.show {
+      display: block;
+    }
+
+    .answer-section.correct {
+      background: #f6ffed;
+      border: 1px solid #b7eb8f;
+    }
+
+    .answer-section.wrong {
+      background: #fff2f0;
+      border: 1px solid #ffccc7;
+    }
+
+    .answer-label {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .answer-section.correct .answer-label {
+      color: #52c41a;
+    }
+
+    .answer-section.wrong .answer-label {
+      color: #ff4d4f;
+    }
+
+    .answer-text {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Answer Card Grid */
+    .answer-grid {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .answer-grid-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    .answer-grid-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+      gap: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .grid-item {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .grid-item.current {
+      border-color: #667eea;
+    }
+
+    .grid-item.not-answered {
+      background: #f5f5f5;
+      color: #999;
+    }
+
+    .grid-item.correct {
+      background: #f6ffed;
+      color: #52c41a;
+    }
+
+    .grid-item.wrong {
+      background: #fff2f0;
+      color: #ff4d4f;
+    }
+
+    .grid-item:hover {
+      transform: scale(1.05);
+    }
+
+    /* Mode Tabs */
+    .mode-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 12px;
+    }
+
+    .mode-tab {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      color: #666;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .mode-tab.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .mode-tab:not(.active):hover {
+      background: #f5f5f5;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      color: #666;
+    }
+
+    .loading::after {
+      content: '';
+      width: 24px;
+      height: 24px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 12px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Filter */
+    .filter-section {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      min-width: 120px;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container { padding: 12px; }
+      .header { padding: 16px; }
+      .header h1 { font-size: 20px; }
+      .stats-bar { gap: 16px; }
+      .stat-value { font-size: 16px; }
+      .question-card { padding: 16px; }
+      .question-content { font-size: 15px; }
+      .option-item { padding: 12px; }
+      .nav-section { gap: 8px; }
+      .nav-btn { padding: 8px 14px; font-size: 13px; }
+      .action-btn { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>📝 智能训练题库</h1>
+      <div class="subtitle">小鹅通练习答题 · 共900题</div>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-label">已答</span>
+          <span class="stat-value" id="answeredCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">正确</span>
+          <span class="stat-value" id="correctCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">正确率</span>
+          <span class="stat-value" id="accuracy">0%</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">进度</span>
+          <span class="stat-value" id="progress">0/900</span>
+        </div>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Mode Tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-mode="practice">练习模式</button>
+      <button class="mode-tab" data-mode="exam">考试模式</button>
+      <button class="mode-tab" data-mode="review">答题卡</button>
+    </div>
+
+    <!-- Filter (only in practice mode) -->
+    <div class="filter-section" id="filterSection">
+      <div class="filter-row">
+        <span class="filter-label">题目类型：</span>
+        <select class="filter-select" id="typeFilter">
+          <option value="">全部</option>
+          <option value="判断题">判断题</option>
+          <option value="单选题">单选题</option>
+          <option value="不定项选择题">不定项选择题</option>
+        </select>
+        <span class="filter-label">筛选状态：</span>
+        <select class="filter-select" id="statusFilter">
+          <option value="">全部</option>
+          <option value="not_answered">未作答</option>
+          <option value="correct">正确答案</option>
+          <option value="wrong">错误答案</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-section" id="navSection">
+      <button class="nav-btn secondary" id="prevBtn">⬅ 上一题</button>
+      <button class="nav-btn secondary" id="nextBtn">下一题 ➡</button>
+      <input type="number" class="jump-input" id="jumpInput" placeholder="题号" min="1" max="900">
+      <button class="nav-btn primary" id="jumpBtn">跳转</button>
+      <span class="page-info" id="pageInfo">第 1 / 900 题</span>
+    </div>
+
+    <!-- Question Card -->
+    <div class="question-card" id="questionCard">
+      <div class="loading">加载题目中</div>
+    </div>
+
+    <!-- Answer Section -->
+    <div class="answer-section" id="answerSection">
+      <div class="answer-label" id="answerLabel"></div>
+      <div class="answer-text" id="answerText"></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-bar" id="actionBar">
+      <button class="action-btn submit" id="submitBtn">提交答案</button>
+      <button class="action-btn next" id="nextQuestionBtn" disabled>下一题</button>
+    </div>
+  </div>
+
+  <script>
+    // Question data (embedded for simplicity)
+    const questions = [];
+
+    // User progress
+    const userProgress = {
+      answers: {},      // { questionNumber: ['B', 'E'] } - array of selected options
+      correct: {},      // { questionNumber: isCorrect }
+      answered: new Set()
+    };
+
+    // Current state
+    let currentQuestion = 1;
+    let currentMode = 'practice';
+    let selectedOptions = [];  // Array for multi-select
+    let isAnswered = false;
+    let isMultiSelect = false;
+
+    // DOM Elements
+    const questionCard = document.getElementById('questionCard');
+    const submitBtn = document.getElementById('submitBtn');
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+    const answerSection = document.getElementById('answerSection');
+    const answerLabel = document.getElementById('answerLabel');
+    const answerText = document.getElementById('answerText');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const jumpBtn = document.getElementById('jumpBtn');
+    const jumpInput = document.getElementById('jumpInput');
+    const pageInfo = document.getElementById('pageInfo');
+    const answeredCountEl = document.getElementById('answeredCount');
+    const correctCountEl = document.getElementById('correctCount');
+    const accuracyEl = document.getElementById('accuracy');
+    const progressEl = document.getElementById('progress');
+    const progressBar = document.getElementById('progressBar');
+    const modeTabs = document.querySelectorAll('.mode-tab');
+    const filterSection = document.getElementById('filterSection');
+    const navSection = document.getElementById('navSection');
+    const actionBar = document.getElementById('actionBar');
+    const typeFilter = document.getElementById('typeFilter');
+    const statusFilter = document.getElementById('statusFilter');
+
+    // Load questions from JSON file
+    async function loadQuestions() {
+      try {
+        const response = await fetch('./questions.json');
+        const data = await response.json();
+        questions.length = 0;
+        questions.push(...data.questions);
+        renderQuestion(currentQuestion);
+      } catch (error) {
+        console.error('Failed to load questions:', error);
+        questionCard.innerHTML = '<div class="loading">加载题目失败，请刷新重试</div>';
+      }
+    }
+
+    // Render question
+    function renderQuestion(num) {
+      const q = questions.find(q => q.number === num);
+      if (!q) {
+        questionCard.innerHTML = '<div class="loading">题目不存在</div>';
+        return;
+      }
+
+      const answered = userProgress.answers[num];
+      const isCorrect = userProgress.correct[num];
+      isAnswered = answered !== undefined;
+      selectedOptions = answered ? (Array.isArray(answered) ? answered : [answered]) : [];
+      isMultiSelect = q.type === '不定项选择题';
+
+      // Build options HTML
+      let optionsHtml = '';
+      if (q.options && q.options.length > 0) {
+        const multiClass = isMultiSelect ? 'multiselect' : '';
+        q.options.forEach((opt, idx) => {
+          const letter = String.fromCharCode(65 + idx); // A, B, C, D...
+          const optClass = getOptionClass(letter, q, answered, isCorrect);
+          optionsHtml += `
+            <div class="option-item ${optClass} ${multiClass}" data-option="${letter}">
+              <div class="option-radio"></div>
+              <div class="option-text">${letter}. ${opt}</div>
+            </div>
+          `;
+        });
+      }
+
+      questionCard.innerHTML = `
+        <div class="question-header">
+          <span class="question-type">${q.type || '单选题'}${isMultiSelect ? '（多选）' : ''}</span>
+          <span class="question-number">第 ${q.number} 题</span>
+        </div>
+        <div class="question-content">${q.content}</div>
+        <div class="options-list">${optionsHtml}</div>
+      `;
+
+      // Update UI state
+      updateUI();
+      bindOptionEvents();
+    }
+
+    // Get option class
+    function getOptionClass(letter, q, answered, isCorrect) {
+      const classes = [];
+      const answeredArr = answered ? (Array.isArray(answered) ? answered : [answered]) : [];
+
+      if (isAnswered) {
+        classes.push('disabled');
+
+        // Check if this option is the correct answer
+        let correctAnswer = q.answer;
+        if (typeof correctAnswer === 'string') {
+          correctAnswer = correctAnswer.replace(/\s/g, '').toUpperCase();
+        }
+
+        const isThisCorrect = String(correctAnswer).includes(letter);
+        const isThisSelected = answeredArr.includes(letter);
+
+        if (isThisCorrect) {
+          classes.push('correct');
+        } else if (isThisSelected && !isThisCorrect) {
+          classes.push('wrong');
+        }
+
+        if (isThisSelected) {
+          classes.push('selected');
+        }
+      } else {
+        // Not answered yet - show selected state
+        if (selectedOptions.includes(letter)) {
+          classes.push('selected');
+        }
+      }
+
+      return classes.join(' ');
+    }
+
+    // Bind option click events
+    function bindOptionEvents() {
+      document.querySelectorAll('.option-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if (isAnswered) return;
+
+          const option = item.dataset.option;
+
+          if (isMultiSelect) {
+            // Multi-select: toggle selection
+            if (selectedOptions.includes(option)) {
+              selectedOptions = selectedOptions.filter(o => o !== option);
+            } else {
+              selectedOptions.push(option);
+              selectedOptions.sort();
+            }
+          } else {
+            // Single select: replace
+            selectedOptions = [option];
+          }
+
+          // Update UI
+          document.querySelectorAll('.option-item').forEach(opt => {
+            const optLetter = opt.dataset.option;
+            if (selectedOptions.includes(optLetter)) {
+              opt.classList.add('selected');
+            } else {
+              opt.classList.remove('selected');
+            }
+          });
+
+          submitBtn.disabled = selectedOptions.length === 0;
+        });
+      });
+    }
+
+    // Submit answer
+    function submitAnswer() {
+      if (selectedOptions.length === 0 || isAnswered) return;
+
+      const q = questions.find(q => q.number === currentQuestion);
+      if (!q) return;
+
+      userProgress.answers[currentQuestion] = selectedOptions;
+      userProgress.answered.add(currentQuestion);
+
+      // Check if correct - for multi-select, all correct options must be selected and no extra ones
+      let correctAnswer = q.answer;
+      if (typeof correctAnswer === 'string') {
+        correctAnswer = correctAnswer.replace(/\s/g, '').toUpperCase();
+      }
+
+      // Convert correct answer to array
+      const correctArr = correctAnswer.split(/\s*/).filter(o => o.length > 0);
+      const selectedArr = selectedOptions;
+
+      // Check: same length and all correct answers are selected
+      const isCorrect = correctArr.length === selectedArr.length &&
+                        correctArr.every(o => selectedArr.includes(o));
+
+      userProgress.correct[currentQuestion] = isCorrect;
+
+      isAnswered = true;
+      renderQuestion(currentQuestion);
+      updateStats();
+
+      // Show answer section
+      if (currentMode === 'practice') {
+        answerSection.className = 'answer-section show ' + (isCorrect ? 'correct' : 'wrong');
+        answerLabel.textContent = isCorrect ? '✓ 回答正确！' : '✗ 回答错误';
+
+        let correctText = '正确答案：' + correctArr.join(' ');
+        if (!isCorrect) {
+          correctText += `（你选择了 ${selectedArr.join(' ')}）`;
+        }
+        answerText.textContent = correctText;
+      } else {
+        answerSection.className = 'answer-section';
+      }
+
+      submitBtn.disabled = true;
+      nextQuestionBtn.disabled = false;
+    }
+
+    // Update stats
+    function updateStats() {
+      const answered = userProgress.answered.size;
+      let correct = 0;
+      for (const num in userProgress.correct) {
+        if (userProgress.correct[num]) correct++;
+      }
+      const accuracy = answered > 0 ? Math.round(correct / answered * 100) : 0;
+
+      answeredCountEl.textContent = answered;
+      correctCountEl.textContent = correct;
+      accuracyEl.textContent = accuracy + '%';
+      progressEl.textContent = `${answered}/900`;
+      progressBar.style.width = (answered / 900 * 100) + '%';
+    }
+
+    // Update UI based on state
+    function updateUI() {
+      // Page info
+      pageInfo.textContent = `第 ${currentQuestion} / 900 题`;
+
+      // Navigation buttons
+      prevBtn.disabled = currentQuestion <= 1;
+      nextBtn.disabled = currentQuestion >= 900;
+
+      // Submit/Next buttons
+      submitBtn.disabled = selectedOptions.length === 0 || isAnswered;
+      nextQuestionBtn.disabled = !isAnswered && currentMode !== 'exam';
+
+      // Mode-specific UI
+      if (currentMode === 'review') {
+        renderAnswerGrid();
+      } else {
+        answerSection.className = 'answer-section';
+      }
+
+      // Filter visibility
+      filterSection.style.display = currentMode === 'practice' ? 'block' : 'none';
+      actionBar.style.display = currentMode === 'review' ? 'none' : 'flex';
+      navSection.style.display = currentMode === 'review' ? 'none' : 'flex';
+    }
+
+    // Render answer grid
+    function renderAnswerGrid() {
+      let itemsHtml = '';
+      for (let i = 1; i <= 900; i++) {
+        const answered = userProgress.answered.has(i);
+        const isCorrect = userProgress.correct[i];
+        const isCurrent = i === currentQuestion;
+
+        let classes = 'grid-item';
+        if (isCurrent) classes += ' current';
+        if (!answered) classes += ' not-answered';
+        else if (isCorrect) classes += ' correct';
+        else classes += ' wrong';
+
+        itemsHtml += `<div class="${classes}" data-num="${i}">${i}</div>`;
+      }
+
+      questionCard.innerHTML = `
+        <div class="answer-grid">
+          <div class="answer-grid-title">答题卡（共900题）</div>
+          <div class="answer-grid-list">${itemsHtml}</div>
+        </div>
+      `;
+
+      // Bind grid item clicks
+      document.querySelectorAll('.grid-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const num = parseInt(item.dataset.num);
+          goToQuestion(num);
+          currentMode = 'practice';
+          modeTabs.forEach(t => t.classList.toggle('active', t.dataset.mode === 'practice'));
+          renderQuestion(num);
+        });
+      });
+    }
+
+    // Go to question
+    function goToQuestion(num) {
+      if (num < 1 || num > 900) return;
+      currentQuestion = num;
+      const answered = userProgress.answers[num];
+      selectedOptions = answered ? (Array.isArray(answered) ? answered : [answered]) : [];
+      isAnswered = userProgress.answered.has(num);
+
+      const q = questions.find(q => q.number === num);
+      isMultiSelect = q && q.type === '不定项选择题';
+
+      if (currentMode === 'review') {
+        renderAnswerGrid();
+      } else {
+        renderQuestion(num);
+      }
+      updateUI();
+    }
+
+    // Next question
+    function nextQuestion() {
+      if (currentQuestion < 900) {
+        goToQuestion(currentQuestion + 1);
+      }
+    }
+
+    // Prev question
+    function prevQuestion() {
+      if (currentQuestion > 1) {
+        goToQuestion(currentQuestion - 1);
+      }
+    }
+
+    // Event listeners
+    submitBtn.addEventListener('click', submitAnswer);
+    nextQuestionBtn.addEventListener('click', nextQuestion);
+    prevBtn.addEventListener('click', prevQuestion);
+    nextBtn.addEventListener('click', nextQuestion);
+
+    jumpBtn.addEventListener('click', () => {
+      const num = parseInt(jumpInput.value);
+      if (num >= 1 && num <= 900) {
+        goToQuestion(num);
+        jumpInput.value = '';
+      }
+    });
+
+    jumpInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        jumpBtn.click();
+      }
+    });
+
+    // Mode tabs
+    modeTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        modeTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentMode = tab.dataset.mode;
+
+        if (currentMode === 'review') {
+          renderAnswerGrid();
+        } else {
+          renderQuestion(currentQuestion);
+        }
+        updateUI();
+      });
+    });
+
+    // Filters
+    typeFilter.addEventListener('change', () => {
+      const type = typeFilter.value;
+      const status = statusFilter.value;
+
+      // Find first matching question
+      for (let i = 1; i <= 900; i++) {
+        const q = questions.find(q => q.number === i);
+        if (!q) continue;
+
+        let match = true;
+        if (type && q.type !== type) match = false;
+        if (status) {
+          if (status === 'not_answered' && userProgress.answered.has(i)) match = false;
+          if (status === 'correct' && !userProgress.correct[i]) match = false;
+          if (status === 'wrong' && (!userProgress.correct[i] || !userProgress.answered.has(i))) match = false;
+        }
+
+        if (match) {
+          goToQuestion(i);
+          break;
+        }
+      }
+    });
+
+    statusFilter.addEventListener('change', typeFilter.onchange);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (currentMode === 'review') return;
+
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        prevQuestion();
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        nextQuestion();
+      } else if (e.key === 'Enter' && !isAnswered && selectedOptions.length > 0) {
+        submitAnswer();
+      } else if (e.key >= 'A' && e.key <= 'Z' && !isAnswered) {
+        // Select option by keyboard
+        const option = e.key;
+        const q = questions.find(q => q.number === currentQuestion);
+        if (q && q.options && q.options.length >= option.charCodeAt(0) - 64) {
+          if (isMultiSelect) {
+            // Toggle for multi-select
+            if (selectedOptions.includes(option)) {
+              selectedOptions = selectedOptions.filter(o => o !== option);
+            } else {
+              selectedOptions.push(option);
+              selectedOptions.sort();
+            }
+          } else {
+            selectedOptions = [option];
+          }
+          document.querySelectorAll('.option-item').forEach(item => {
+            const optLetter = item.dataset.option;
+            if (selectedOptions.includes(optLetter)) {
+              item.classList.add('selected');
+            } else {
+              item.classList.remove('selected');
+            }
+          });
+          submitBtn.disabled = selectedOptions.length === 0;
+        }
+      }
+    });
+
+    // Load questions on init
+    loadQuestions();
+  </script>
+</body>
+</html>
