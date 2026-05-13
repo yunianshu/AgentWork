@@ -506,6 +506,7 @@
     .filter-label {
       font-size: 14px;
       color: #666;
+      white-space: nowrap;
     }
 
     .filter-select {
@@ -514,6 +515,7 @@
       border-radius: 6px;
       font-size: 14px;
       min-width: 120px;
+      max-width: 100%;
     }
 
     .filter-select:focus {
@@ -531,6 +533,19 @@
       .question-card { padding: 16px; }
       .question-content { font-size: 15px; }
       .option-item { padding: 12px; }
+      .filter-row {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        row-gap: 10px;
+        column-gap: 8px;
+      }
+      .filter-label {
+        align-self: center;
+      }
+      .filter-select {
+        width: 100%;
+        min-width: 0;
+      }
       .nav-section { gap: 8px; }
       .nav-btn { padding: 8px 14px; font-size: 13px; }
       .action-btn { padding: 12px 16px; }
