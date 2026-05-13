@@ -665,9 +665,12 @@
     // 从唯一题库源加载题目；file:// 页面需通过本地服务读取数据
     async function loadQuestions() {
       try {
-        const questionsUrl = window.location.protocol === 'file:'
-          ? 'http://localhost:3000/questions.json'
-          : './questions.json';
+        let questionsUrl = './questions.json';
+        if (window.location.protocol === 'file:') {
+          questionsUrl = 'http://localhost:3000/questions.json';
+        } else if (window.location.pathname.includes('/quiz-app/public/')) {
+          questionsUrl = '../data/questions.json';
+        }
         const response = await fetch(`${questionsUrl}?v=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) {
           throw new Error(`题库加载失败：HTTP ${response.status}`);
