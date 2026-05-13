@@ -662,10 +662,13 @@
     const typeFilter = document.getElementById('typeFilter');
     const statusFilter = document.getElementById('statusFilter');
 
-    // 从 JSON 文件加载题目，追加版本参数避免浏览器继续使用旧缓存
+    // 从唯一题库源加载题目；file:// 页面需通过本地服务读取数据
     async function loadQuestions() {
       try {
-        const response = await fetch(`./questions.json?v=${Date.now()}`, { cache: 'no-store' });
+        const questionsUrl = window.location.protocol === 'file:'
+          ? 'http://localhost:3000/questions.json'
+          : './questions.json';
+        const response = await fetch(`${questionsUrl}?v=${Date.now()}`, { cache: 'no-store' });
         if (!response.ok) {
           throw new Error(`题库加载失败：HTTP ${response.status}`);
         }
@@ -675,7 +678,10 @@
         renderQuestion(currentQuestion);
       } catch (error) {
         console.error('Failed to load questions:', error);
-        questionCard.innerHTML = '<div class="loading">加载题目失败，请刷新重试</div>';
+        const message = window.location.protocol === 'file:'
+          ? '加载题目失败：请先在 quiz-app 目录运行 npm start，然后访问 http://localhost:3000/'
+          : '加载题目失败，请刷新重试';
+        questionCard.innerHTML = `<div class="loading">${message}</div>`;
       }
     }
 

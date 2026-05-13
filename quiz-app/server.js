@@ -9,6 +9,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve questions.json
 app.get('/questions.json', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendFile(path.join(__dirname, 'data', 'questions.json'));
 });
 
