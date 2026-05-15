@@ -1,0 +1,3007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 知识 Wiki 详尽版 - 快速记忆手册</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #222230;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --accent-indigo: #6366f1;
+            --accent-red: #ef4444;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #2a2a3a;
+            --gradient-ai: linear-gradient(135deg, #00d4ff 0%, #a855f7 50%, #ec4899 100%);
+            --gradient-dl: linear-gradient(135deg, #10b981 0%, #00d4ff 100%);
+            --gradient-ml: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
+            --gradient-data: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            --gradient-biz: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%);
+            --gradient-py: linear-gradient(135deg, #10b981 0%, #6366f1 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-ai);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--gradient-ai);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .nav-link.active {
+            color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-ai);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 2.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-ai);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* 章节样式 */
+        .chapter {
+            margin-bottom: 4rem;
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .chapter-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+        }
+
+        .chapter-icon.ai { background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(168, 85, 247, 0.2)); }
+        .chapter-icon.dl { background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(0, 212, 255, 0.2)); }
+        .chapter-icon.ml { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(236, 72, 153, 0.2)); }
+        .chapter-icon.data { background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(99, 102, 241, 0.2)); }
+        .chapter-icon.biz { background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(245, 158, 11, 0.2)); }
+        .chapter-icon.py { background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(99, 102, 241, 0.2)); }
+
+        .chapter-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .chapter-title.ai { color: var(--accent-cyan); }
+        .chapter-title.dl { color: var(--accent-emerald); }
+        .chapter-title.ml { color: var(--accent-amber); }
+        .chapter-title.data { color: var(--accent-purple); }
+        .chapter-title.biz { color: var(--accent-pink); }
+        .chapter-title.py { color: var(--accent-emerald); }
+
+        .chapter-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* 知识卡片 */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card.ai::before { background: var(--gradient-ai); }
+        .card.dl::before { background: var(--gradient-dl); }
+        .card.ml::before { background: var(--gradient-ml); }
+        .card.data::before { background: var(--gradient-data); }
+        .card.biz::before { background: var(--gradient-biz); }
+        .card.py::before { background: var(--gradient-py); }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title .tag {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .tag-core { background: rgba(0, 212, 255, 0.15); color: var(--accent-cyan); }
+        .tag-key { background: rgba(236, 72, 153, 0.15); color: var(--accent-pink); }
+        .tag-def { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+        .tag-formula { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+        .tag-note { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+
+        .card-content {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .card-content p {
+            margin-bottom: 0.75rem;
+        }
+
+        .card-content ul, .card-content ol {
+            margin: 0.75rem 0;
+            padding-left: 1.25rem;
+        }
+
+        .card-content li {
+            margin-bottom: 0.4rem;
+        }
+
+        .card-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        .highlight-pink { color: var(--accent-pink); font-weight: 500; }
+        .highlight-purple { color: var(--accent-purple); font-weight: 500; }
+        .highlight-amber { color: var(--accent-amber); font-weight: 500; }
+        .highlight-emerald { color: var(--accent-emerald); font-weight: 500; }
+
+        /* 代码块 */
+        .code-block {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-emerald);
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-block .comment { color: var(--text-muted); }
+        .code-block .keyword { color: var(--accent-pink); }
+        .code-block .function { color: var(--accent-cyan); }
+        .code-block .string { color: var(--accent-amber); }
+
+        /* 公式块 */
+        .formula-block {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-purple);
+            font-family: 'Courier New', monospace;
+        }
+
+        .formula-block .formula-title {
+            color: var(--accent-purple);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 比较表格 */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .compare-table th {
+            background: var(--bg-secondary);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .compare-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .compare-table tr:hover td {
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        /* 手风琴 */
+        .accordion {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin: 0.75rem 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .accordion-header {
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .accordion-header:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .accordion-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s;
+            color: var(--accent-cyan);
+        }
+
+        .accordion.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .accordion.active .accordion-content {
+            max-height: 2000px;
+        }
+
+        .accordion-body {
+            padding: 0 1.25rem 1.25rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* 流程图 */
+        .flow-chart {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .flow-node {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        .flow-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* 标签页 */
+        .tabs {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .tab.active {
+            color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.1);
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 0 0 8px 8px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 引用块 */
+        .quote-block {
+            border-left: 4px solid var(--accent-cyan);
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            background: var(--bg-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .quote-block .quote-title {
+            color: var(--accent-cyan);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 警告框 */
+        .warning-block {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning-block .warning-title {
+            color: var(--accent-amber);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* 分割线 */
+        .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 1.5rem 0;
+        }
+
+        /* 列表样式 */
+        .list-styled li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .list-styled li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+
+        /* 嵌套卡片 */
+        .nested-card {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .nested-card-title {
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* 进度指示器 */
+        .progress-list {
+            counter-reset: item;
+        }
+
+        .progress-list li {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 0.75rem;
+            list-style: none;
+        }
+
+        .progress-list li::before {
+            content: counter(item);
+            counter-increment: item;
+            position: absolute;
+            left: 0;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* 快捷导航 */
+        .quick-nav {
+            position: fixed;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .quick-nav a {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .quick-nav a:hover {
+            border-color: var(--accent-cyan);
+            transform: scale(1.3);
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+        }
+
+        .quick-nav a::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 26px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .quick-nav a:hover::after {
+            opacity: 1;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero-stats { flex-wrap: wrap; gap: 2rem; }
+            .card-grid { grid-template-columns: 1fr; }
+            .quick-nav { display: none; }
+            .nav-links { display: none; }
+        }
+
+        /* 滚动动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                <span class="logo-text">AI 知识 Wiki 详尽版</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#ai" class="nav-link active">🤖 AI基础</a>
+                <a href="#dl" class="nav-link">🧠 深度学习</a>
+                <a href="#ml" class="nav-link">📊 机器学习</a>
+                <a href="#data" class="nav-link">💾 数据处理</a>
+                <a href="#biz" class="nav-link">🏢 业务流程</a>
+                <a href="#python" class="nav-link">🐍 Python</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="quick-nav">
+        <a href="#ai" data-label="人工智能基础"></a>
+        <a href="#dl" data-label="深度学习"></a>
+        <a href="#ml" data-label="机器学习"></a>
+        <a href="#data" data-label="数据处理"></a>
+        <a href="#biz" data-label="业务流程"></a>
+        <a href="#python" data-label="Python"></a>
+    </div>
+
+    <div class="container">
+        <section class="hero">
+            <h1>人工智能知识图谱 · 详尽版</h1>
+            <p>系统梳理 AI 算法、技术及应用核心知识点，包含详细定义、公式、代码示例、对比分析</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">知识模块</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">80+</div>
+                    <div class="stat-label">核心概念</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">知识点</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 第一章：人工智能基础 ==================== -->
+        <section id="ai" class="chapter fade-in">
+            <div class="chapter-header">
+                <div class="chapter-icon ai">🤖</div>
+                <div>
+                    <h2 class="chapter-title ai">第一章：人工智能基础</h2>
+                    <p class="chapter-subtitle">人工神经网络、机器学习分类、集成学习、注意力机制</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <!-- 人工神经网络 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        人工神经网络 ANN
+                        <span class="tag tag-core">核心概念</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>模拟人脑神经系统工作原理的数学模型，由大量神经元互联形成。</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>三层结构：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight">输入层</span> - 接收外部数据，不进行计算</li>
+                            <li><span class="highlight">隐藏层</span> - 核心计算层，可有多层</li>
+                            <li><span class="highlight">输出层</span> - 输出最终结果</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>数据流向：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">输入层</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">隐藏层₁</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">隐藏层₂</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">...</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">输出层</span>
+                        </div>
+
+                        <div class="warning-block">
+                            <div class="warning-title">⚠️ 重要</div>
+                            <p style="margin-top:0.5rem;">输入层到输出层是<span class="highlight-amber">单向流动</span>，信号向前传播</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BP算法 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        BP 反向传播算法
+                        <span class="tag tag-core">核心算法</span>
+                        <span class="tag tag-key">1986年</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>全称：</strong>Backpropagation Algorithm（反向传播算法）</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心原理：</strong></p>
+                        <ul class="list-styled">
+                            <li>通过<span class="highlight">损失函数</span>计算输出与真实值的误差</li>
+                            <li>误差从输出层向输入层<span class="highlight-pink">反向传播</span></li>
+                            <li>根据梯度下降法<span class="highlight-amber">调整各层权重</span></li>
+                        </ul>
+
+                        <div class="formula-block">
+                            <div class="formula-title">权重更新公式</div>
+                            W_new = W_old - η × ∂L/∂W
+
+                            <p style="margin-top:0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                                其中 η 为学习率，L 为损失函数
+                            </p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>训练过程：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">前向传播</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">计算误差</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">反向传播</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">更新权重</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 深度学习 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        深度学习 Deep Learning
+                        <span class="tag tag-core">核心概念</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>深度学习是机器学习的一个分支，是传统人工神经网络发展到<span class="highlight">多隐藏层</span>的情况。</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>深度学习 vs 传统机器学习：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>对比项</th><th>机器学习</th><th>深度学习</th></tr>
+                            <tr><td>特征提取</td><td>人工设计特征</td><td>自动学习特征</td></tr>
+                            <tr><td>特征复杂度</td><td>简单基础特征</td><td>基础+复杂特征</td></tr>
+                            <tr><td>网络结构</td><td>浅层网络</td><td>深层网络</td></tr>
+                            <tr><td>计算资源</td><td>要求较低</td><td>需要GPU</td></tr>
+                        </table>
+
+                        <div class="quote-block">
+                            <div class="quote-title">💡 理解</div>
+                            <p>深度学习 = 机器学习 + <span class="highlight">自动特征提取</span></p>
+                            <p style="margin-top:0.5rem;">核心优势：自动从数据中学习层次化特征表示</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 机器学习分类 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        机器学习分类
+                        <span class="tag tag-core">核心框架</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>六大分类：</strong></p>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">1. 监督学习 Supervised Learning</div>
+                            <p style="color: var(--text-muted);">有标签数据，学习输入到输出的映射关系</p>
+                            <p style="margin-top:0.5rem;">应用：分类、回归</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">2. 无监督学习 Unsupervised Learning</div>
+                            <p style="color: var(--text-muted);">无标签数据，发现数据内部结构</p>
+                            <p style="margin-top:0.5rem;">应用：聚类、降维</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">3. 半监督学习 Semi-supervised Learning</div>
+                            <p style="color: var(--text-muted);">少量标签 + 大量无标签数据</p>
+                            <p style="margin-top:0.5rem;">应用：图像分类、文本处理</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">4. 深度学习 Deep Learning</div>
+                            <p style="color: var(--text-muted);">多层神经网络，自动学习特征</p>
+                            <p style="margin-top:0.5rem;">应用：CV、NLP、语音</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">5. 强化学习 Reinforcement Learning</div>
+                            <p style="color: var(--text-muted);">通过奖励信号学习策略</p>
+                            <p style="margin-top:0.5rem;">应用：游戏、机器人</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">6. 集成学习 Ensemble Learning</div>
+                            <p style="color: var(--text-muted);">组合多个学习器提升性能</p>
+                            <p style="margin-top:0.5rem;">方法：Bagging、Boosting、Stacking</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 集成学习详解 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        集成学习方法
+                        <span class="tag tag-key">重要方法</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>核心思想：</strong>将多个弱学习器组合，形成更强大的学习器</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>1. Bootstrap + Boosting（AdaBoost）</strong></p>
+                        <ul class="list-styled">
+                            <li>迭代训练多个<span class="highlight">弱分类器</span></li>
+                            <li>每个分类器的权重根据<span class="highlight-pink">错误率</span>调整</li>
+                            <li>错误率高的分类器权重<span class="highlight-amber">降低</span></li>
+                            <li>最终组合所有分类器输出</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>2. Stacking（堆叠集成）</strong></p>
+                        <ul class="list-styled">
+                            <li>将<span class="highlight">多个学习器的输出</span>作为新特征</li>
+                            <li>使用<span class="highlight-purple">元分类器</span>进行最终预测</li>
+                            <li>典型结构：基学习器 → 元学习器</li>
+                        </ul>
+
+                        <div class="flow-chart">
+                            <span class="flow-node">模型₁</span>
+                            <span class="flow-node">模型₂</span>
+                            <span class="flow-node">模型₃</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">元特征</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">元分类器</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">输出</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 注意力机制 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        注意力机制 vs 自注意力机制
+                        <span class="tag tag-core">核心差异</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="tabs">
+                            <button class="tab active" onclick="switchTab(this, 'at-intro')">注意力机制 AT</button>
+                            <button class="tab" onclick="switchTab(this, 'sa-intro')">自注意力 SA</button>
+                            <button class="tab" onclick="switchTab(this, 'compare')">对比</button>
+                        </div>
+
+                        <div id="at-intro" class="tab-content active">
+                            <p><strong>已知：</strong>query（查询）和序列</p>
+                            <p><strong>目标：</strong>从序列中找出和查询最相关的信息</p>
+
+                            <div class="divider"></div>
+
+                            <p><strong>特点：</strong></p>
+                            <ul class="list-styled">
+                                <li>应用在 <span class="highlight">output 层</span>或 state 层</li>
+                                <li>连接<span class="highlight-pink">两个不同组件</span>（如 Encoder → Decoder）</li>
+                                <li>一个模型中通常只使用 <span class="highlight-amber">1 次</span></li>
+                                <li>善于寻找<span class="highlight-purple">两个序列</span>之间的关系</li>
+                                <li>可以连接<span class="highlight-emerald">两种不同模态</span>（图片+文字）</li>
+                            </ul>
+                        </div>
+
+                        <div id="sa-intro" class="tab-content">
+                            <p><strong>特点：</strong></p>
+                            <ul class="list-styled">
+                                <li>更多关注 <span class="highlight">input 层</span></li>
+                                <li>只关注<span class="highlight-pink">一个组件</span>（如 Transformer 的 Encoder）</li>
+                                <li>一个模型中通常使用<span class="highlight-amber">多次</span>
+                                    <br><span style="color: var(--text-muted); font-size: 0.85rem;">&nbsp;&nbsp;&nbsp;例：Transformer 18次，BERT 12次</span>
+                                </li>
+                                <li>善于寻找<span class="highlight-purple">同一序列</span>中不同部分的关系</li>
+                                <li>更多用于<span class="highlight-emerald">同一种模态</span></li>
+                            </ul>
+                        </div>
+
+                        <div id="compare" class="tab-content">
+                            <table class="compare-table">
+                                <tr><th>维度</th><th>注意力机制 AT</th><th>自注意力 SA</th></tr>
+                                <tr><td>关注层级</td><td>output/state 层</td><td>input 层</td></tr>
+                                <tr><td>组件数量</td><td>两个组件</td><td>单个组件</td></tr>
+                                <tr><td>使用次数</td><td>通常 1 次</td><td>通常多次</td></tr>
+                                <tr><td>擅长任务</td><td>两序列关系</td><td>同序列关系</td></tr>
+                                <tr><td>模态类型</td><td>跨模态</td><td>同模态为主</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 知识图谱 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        知识图谱 Knowledge Graph
+                        <span class="tag tag-def">2012 Google</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>提出时间：</strong>2012 年由 Google 提出</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>两大类型：</strong></p>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🗺️ 通用知识图谱</div>
+                            <p style="color: var(--text-muted);">面向通用领域，以百科知识为主</p>
+                            <p style="margin-top:0.5rem;">例：DBpedia、WikiData</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🏢 行业知识图谱</div>
+                            <p style="color: var(--text-muted);">面向特定行业，专业性强</p>
+                            <p style="margin-top:0.5rem;">例：医疗知识图谱、金融知识图谱</p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心构成：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight">实体</span> - 现实世界的事物</li>
+                            <li><span class="highlight-pink">关系</span> - 实体之间的联系</li>
+                            <li><span class="highlight-amber">属性</span> - 实体的特征</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 主成分分析 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        主成分分析 PCA
+                        <span class="tag tag-key">降维方法</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>全称：</strong>Principal Component Analysis</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心思想：</strong></p>
+                        <ul class="list-styled">
+                            <li>将高维数据<span class="highlight">投影</span>到低维空间</li>
+                            <li>保留数据<span class="highlight-pink">最大方差</span>方向</li>
+                            <li>去除冗余信息和噪声</li>
+                        </ul>
+
+                        <div class="quote-block">
+                            <div class="quote-title">💡 应用场景</div>
+                            <p>数据降维、可视化、特征提取、预处理</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 第二章：深度学习 ==================== -->
+        <section id="dl" class="chapter fade-in">
+            <div class="chapter-header">
+                <div class="chapter-icon dl">🧠</div>
+                <div>
+                    <h2 class="chapter-title dl">第二章：深度学习网络架构</h2>
+                    <p class="chapter-subtitle">CNN、RNN、LSTM、Transformer、经典架构、点云处理</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <!-- 卷积神经网络 CNN -->
+                <div class="card dl">
+                    <div class="card-title">
+                        卷积神经网络 CNN
+                        <span class="tag tag-core">核心网络</span>
+                        <span class="tag tag-note">📷 图像处理</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>一种<span class="highlight">前馈神经网络</span>，受生物学上<span class="highlight-pink">感受野</span>机制启发提出</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>三大结构特性：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight">局部连接</span> - 只连接局部区域神经元</li>
+                            <li><span class="highlight-pink">权重共享</span> - 同一特征图共享权重</li>
+                            <li><span class="highlight-amber">空间/时间次采样</span> - 降维增强鲁棒性</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>网络结构：</strong></p>
+                        <div class="nested-card">
+                            <div class="nested-card-title">1. 输入层</div>
+                            <p style="color: var(--text-muted);">接收输入图像，将其转换为特征图</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">2. 卷积层</div>
+                            <p style="color: var(--text-muted);">通过卷积核提取图像特征</p>
+                            <p style="margin-top:0.5rem; color: var(--accent-amber);">三维结构：高度 × 宽度 × 通道数</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">3. 池化层</div>
+                            <p style="color: var(--text-muted);">对特征图进行<span class="highlight-emerald">下采样</span>，减少空间维度</p>
+                            <ul style="margin-top:0.5rem; font-size: 0.85rem;">
+                                <li><strong>最大池化</strong> - 取区域最大值</li>
+                                <li><strong>平均池化</strong> - 取区域平均值</li>
+                            </ul>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">4. 全连接层</div>
+                            <p style="color: var(--text-muted);">连接所有特征，输出最终分类结果</p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>典型应用：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">图像分类</span>
+                            <span class="flow-node">目标检测</span>
+                            <span class="flow-node">语义分割</span>
+                            <span class="flow-node">视频处理</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 循环神经网络 RNN -->
+                <div class="card dl">
+                    <div class="card-title">
+                        循环神经网络 RNN
+                        <span class="tag tag-core">核心网络</span>
+                        <span class="tag tag-note">📝 序列数据</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>全称：</strong>Recurrent Neural Network</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心能力：</strong></p>
+                        <ul class="list-styled">
+                            <li>处理<span class="highlight">序列数据</span>（文本、语音、时间序列）</li>
+                            <li>捕获输入序列的<span class="highlight-pink">上下文信息</span></li>
+                            <li>对方向传播算法的<span class="highlight-amber">优化</span></li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>网络结构特点：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">X₀</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">隐藏层</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">X₁</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">隐藏层</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">...</span>
+                        </div>
+                        <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+                            每个时间步的隐藏层不仅接收当前输入，还接收上一时间步的隐藏状态
+                        </p>
+
+                        <div class="warning-block">
+                            <div class="warning-title">⚠️ RNN 问题</div>
+                            <ul style="margin-top:0.5rem;">
+                                <li>梯度消失 / 梯度爆炸</li>
+                                <li>长期依赖问题</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LSTM -->
+                <div class="card dl">
+                    <div class="card-title">
+                        长短时记忆网络 LSTM
+                        <span class="tag tag-key">重点网络</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>全称：</strong>Long Short-Term Memory</p>
+                        <p><strong>提出目的：</strong>解决传统 RNN 的<span class="highlight-pink">梯度消失/梯度爆炸</span>问题</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心机制 - 三门结构：</strong></p>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🚪 输入门 (Input Gate)</div>
+                            <p style="color: var(--text-muted);">控制哪些新信息进入细胞状态</p>
+                            <p style="margin-top:0.5rem;"><strong>公式：</strong><code style="color: var(--accent-emerald);">i = σ(Wᵢ·[hₜ₋₁, xₜ] + bᵢ)</code></p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🚪 遗忘门 (Forget Gate)</div>
+                            <p style="color: var(--text-muted);">决定细胞状态中哪些信息被丢弃</p>
+                            <p style="margin-top:0.5rem;"><strong>公式：</strong><code style="color: var(--accent-emerald);">f = σ(Wf·[hₜ₋₁, xₜ] + bf)</code></p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🚪 输出门 (Output Gate)</div>
+                            <p style="color: var(--text-muted);">决定下一隐藏状态的值</p>
+                            <p style="margin-top:0.5rem;"><strong>公式：</strong><code style="color: var(--accent-emerald);">o = σ(Wₒ·[hₜ₋₁, xₜ] + bₒ)</code></p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>典型应用：</strong></p>
+                        <ul class="list-styled">
+                            <li>语音识别</li>
+                            <li>文本生成</li>
+                            <li>视频描述</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Transformer -->
+                <div class="card dl">
+                    <div class="card-title">
+                        Transformer 模型
+                        <span class="tag tag-core">核心架构</span>
+                        <span class="tag tag-note">🔥 现代主流</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>核心特点：</strong>基于<span class="highlight">自注意力机制</span>的深度学习模型</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>架构组成：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">编码器</span>
+                            <span class="flow-arrow">+</span>
+                            <span class="flow-node">解码器</span>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">📦 编码器 (Encoder)</div>
+                            <p style="color: var(--text-muted);">N 层堆叠，每层包含：</p>
+                            <ul style="margin-top:0.5rem; font-size: 0.85rem;">
+                                <li>多头自注意力层 (Multi-Head Self-Attention)</li>
+                                <li>前馈神经网络层 (Feed Forward)</li>
+                                <li>残差连接 + 层归一化</li>
+                            </ul>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">📦 解码器 (Decoder)</div>
+                            <p style="color: var(--text-muted);">N 层堆叠，每层包含：</p>
+                            <ul style="margin-top:0.5rem; font-size: 0.85rem;">
+                                <li>掩码多头自注意力层</li>
+                                <li>编码器-解码器注意力层</li>
+                                <li>前馈神经网络层</li>
+                            </ul>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>应用领域：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">NLP</span>
+                            <span class="flow-node">计算机视觉</span>
+                            <span class="flow-node">语音处理</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CNN 经典架构 -->
+                <div class="card dl">
+                    <div class="card-title">
+                        CNN 经典架构演进
+                        <span class="tag tag-key">必须掌握</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span class="accordion-title">📜 LeNet - AlexNet - VGG</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <div class="nested-card">
+                                        <div class="nested-card-title">LeNet (1998)</div>
+                                        <p style="color: var(--accent-emerald);">最早发布的卷积神经网络</p>
+                                        <p>用于<span class="highlight">手写数字识别</span>（MNIST）</p>
+                                        <p>结构：7层网络（2卷积+2池化+3全连接）</p>
+                                    </div>
+
+                                    <div class="nested-card">
+                                        <div class="nested-card-title">AlexNet (2012)</div>
+                                        <p style="color: var(--accent-emerald);">ImageNet 竞赛冠军</p>
+                                        <p>第一个用于<span class="highlight">图像分类任务</span>的CNN</p>
+                                        <p>创新：ReLU激活、Dropout、GPU训练</p>
+                                    </div>
+
+                                    <div class="nested-card">
+                                        <div class="nested-card-title">VGG (2014)</div>
+                                        <p style="color: var(--accent-emerald);">显著提升图像分类准确率</p>
+                                        <p>核心设计：</p>
+                                        <ul style="font-size: 0.85rem;">
+                                            <li>全部使用 <span class="highlight-amber">3×3 小卷积核</span></li>
+                                            <li>使用 <span class="highlight-amber">2×2 最大池化</span></li>
+                                            <li>堆叠多个相同结构增加深度</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span class="accordion-title">📜 GoogleNet - ResNet - DenseNet</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <div class="nested-card">
+                                        <div class="nested-card-title">GoogleNet / Inception (2014)</div>
+                                        <p style="color: var(--accent-emerald);">提高计算效能和模型性能</p>
+                                        <p>创新：Inception 模块（多尺度卷积并行）</p>
+                                        <p>优势：<span class="highlight">显著减少参数数量</span></p>
+                                    </div>
+
+                                    <div class="nested-card">
+                                        <div class="nested-card-title">ResNet (2015)</div>
+                                        <p style="color: var(--accent-emerald);">残差网络</p>
+                                        <p>解决问题：<span class="highlight-pink">梯度消失</span>，使极深网络可训练</p>
+                                        <p>核心：残差连接 (Skip Connection)</p>
+                                        <p>公式：<code style="color: var(--accent-cyan);">y = F(x) + x</code></p>
+                                    </div>
+
+                                    <div class="nested-card">
+                                        <div class="nested-card-title">DenseNet (2017)</div>
+                                        <p style="color: var(--accent-emerald);">密集连接网络</p>
+                                        <p>解决问题：梯度消失 + <span class="highlight-amber">特征再利用</span></p>
+                                        <p>核心：每层与所有后续层直接连接</p>
+                                        <p>优势：减少参数数量</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 点云数据 -->
+                <div class="card dl">
+                    <div class="card-title">
+                        点云数据处理
+                        <span class="tag tag-key">重要内容</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>三维空间中的点集合，包含坐标、颜色等信息</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>采集设备：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight">深度相机</span> - 红外激光投影，适合室内AR/VR</li>
+                            <li><span class="highlight-pink">双目相机</span> - 双视角计算三维坐标</li>
+                            <li><span class="highlight-amber">激光扫描仪</span> - 高精度测量</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>应用领域：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">三维重建</span>
+                            <span class="flow-node">自动驾驶</span>
+                            <span class="flow-node">地物分割</span>
+                            <span class="flow-node">形状分类</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>关键点提取算法：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>类型</th><th>算法</th></tr>
+                            <tr><td>2D关键点</td><td>Harris角点、SIFT、SURF</td></tr>
+                            <tr><td>3D关键点</td><td>Harris3D、ISS3D、NARF(最常用)、SIFT3D</td></tr>
+                        </table>
+
+                        <div class="divider"></div>
+
+                        <p><strong>点云滤波方法：</strong></p>
+                        <p>双边滤波、高斯滤波、条件滤波、直通滤波、随机采样一致滤波</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>特征描述算法：</strong></p>
+                        <ul class="list-styled">
+                            <li>法线和曲率计算</li>
+                            <li>特征值分析</li>
+                            <li>PFH / FPFH（点特征直方图）</li>
+                            <li>三维形状语义、旋转图像</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>配准算法：</strong></p>
+                        <p>NDT、VPF、4PCs、ICP</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 第三章：机器学习 ==================== -->
+        <section id="ml" class="chapter fade-in">
+            <div class="chapter-header">
+                <div class="chapter-icon ml">📊</div>
+                <div>
+                    <h2 class="chapter-title ml">第三章：机器学习模型评估</h2>
+                    <p class="chapter-subtitle">分类/回归/聚类评估指标、sklearn API、数据预处理</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <!-- 混淆矩阵 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        混淆矩阵 Confusion Matrix
+                        <span class="tag tag-core">基础框架</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>分类模型预测结果的<span class="highlight">可视化矩阵</span></p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>四要素：</strong></p>
+                        <table class="compare-table">
+                            <tr>
+                                <th></th>
+                                <th>预测为正类</th>
+                                <th>预测为负类</th>
+                            </tr>
+                            <tr>
+                                <td><strong>实际正类</strong></td>
+                                <td style="color: var(--accent-emerald);">TP (真正类)</td>
+                                <td style="color: var(--accent-red);">FN (假负类)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>实际负类</strong></td>
+                                <td style="color: var(--accent-red);">FP (假正类)</td>
+                                <td style="color: var(--accent-emerald);">TN (真负类)</td>
+                            </tr>
+                        </table>
+
+                        <div class="divider"></div>
+
+                        <p><strong>详细定义：</strong></p>
+                        <div class="nested-card">
+                            <div class="nested-card-title" style="color: var(--accent-emerald);">TP (True Positive)</div>
+                            <p>真实类别是<span class="highlight">正类</span>，模型识别结果也是<span class="highlight">正类</span></p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title" style="color: var(--accent-red);">FN (False Negative)</div>
+                            <p>真实类别是<span class="highlight-pink">正类</span>，但模型识别为<span class="highlight-pink">负类</span></p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title" style="color: var(--accent-red);">FP (False Positive)</div>
+                            <p>真实类别是<span class="highlight-amber">负类</span>，但模型识别为<span class="highlight-amber">正类</span></p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title" style="color: var(--accent-emerald);">TN (True Negative)</div>
+                            <p>真实类别是<span class="highlight-purple">负类</span>，模型识别结果也是<span class="highlight-purple">负类</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 准确率 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        准确率 Accuracy
+                        <span class="tag tag-core">核心指标</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>分类模型<span class="highlight">正确分类</span>的样本数与总样本数之比</p>
+
+                        <div class="formula-block">
+                            <div class="formula-title">计算公式</div>
+                            Accuracy = (TP + TN) / (TP + TN + FP + FN)
+
+                            <p style="margin-top:0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                                = 预测正确的样本数 / 总样本数
+                            </p>
+                        </div>
+
+                        <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score
+
+y_true = [1, 0, 1, 1, 0, 1]
+y_pred = [1, 0, 1, 0, 0, 1]
+
+accuracy = accuracy_score(y_true, y_pred)
+<span class="function">print</span>(<span class="string">f"准确率: {accuracy:.2f}"</span>)  <span class="comment"># 输出: 0.83</span>
+                        </div>
+
+                        <div class="warning-block">
+                            <div class="warning-title">⚠️ 局限性</div>
+                            <p style="margin-top:0.5rem;">准确率<span class="highlight-pink">不适用于类别不平衡</span>的情况</p>
+                            <p style="margin-top:0.5rem; color: var(--text-muted);">例如：医疗诊断中，99%的正常人被误判为病人可能仍有99%准确率</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 精确率 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        精确率 Precision (查准率)
+                        <span class="tag tag-key">重点指标</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>模型预测为正类的样本中，实际确实为正类的<span class="highlight">比例</span></p>
+
+                        <div class="formula-block">
+                            <div class="formula-title">计算公式</div>
+                            Precision = TP / (TP + FP)
+
+                            <p style="margin-top:0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                                = 预测为正类且正确的 / 所有预测为正类的
+                            </p>
+                        </div>
+
+                        <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> precision_score
+
+precision = precision_score(y_true, y_pred)
+<span class="function">print</span>(<span class="string">f"精确率: {precision:.2f}"</span>)
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>适用场景：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight-amber">推荐系统</span> - 不希望推荐错误的内容</li>
+                            <li><span class="highlight-amber">文献检索</span> - 不希望返回无关结果</li>
+                            <li><span class="highlight-amber">搜索引擎</span> - 注重搜索结果准确性</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 召回率 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        召回率 Recall (查全率)
+                        <span class="tag tag-key">重点指标</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>所有实际为正类的样本中，被模型<span class="highlight">正确预测</span>为正类的比例</p>
+
+                        <div class="formula-block">
+                            <div class="formula-title">计算公式</div>
+                            Recall = TP / (TP + FN)
+
+                            <p style="margin-top:0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                                = 预测为正类且正确的 / 所有实际为正类的
+                            </p>
+                        </div>
+
+                        <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> recall_score
+
+recall = recall_score(y_true, y_pred)
+<span class="function">print</span>(<span class="string">f"召回率: {recall:.2f}"</span>)
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>适用场景：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight-pink">罕见病检测</span> - 不能漏掉任何病例</li>
+                            <li><span class="highlight-pink">欺诈检测</span> - 不能放过任何欺诈行为</li>
+                            <li><span class="highlight-pink">医疗诊断</span> - 漏诊后果严重</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- F1分数 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        F1 分数
+                        <span class="tag tag-core">综合指标</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>精确率和召回率的<span class="highlight">调和平均</span>，提供两者之间的平衡度量</p>
+
+                        <div class="formula-block">
+                            <div class="formula-title">计算公式</div>
+                            F1 = 2 × (Precision × Recall) / (Precision + Recall)
+
+                            <p style="margin-top:0.75rem; color: var(--accent-purple);">本质是 Precision 和 Recall 的调和平均</p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>取值范围与含义：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>取值</th><th>含义</th></tr>
+                            <tr><td><span class="highlight">F1 = 1</span></td><td>最佳，精确率和召回率都为1</td></tr>
+                            <tr><td><span class="highlight-amber">F1 = 0.5</span></td><td>中等水平</td></tr>
+                            <tr><td><span class="highlight-pink">F1 = 0</span></td><td>最差，精确率或召回率至少有一个为0</td></tr>
+                        </table>
+
+                        <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> f1_score
+
+<span class="comment"># 二分类</span>
+f1 = f1_score(y_true, y_pred, average=<span class="string">'binary'</span>)
+
+<span class="comment"># 多分类</span>
+f1_macro = f1_score(y_true, y_pred, average=<span class="string">'macro'</span>)
+f1_micro = f1_score(y_true, y_pred, average=<span class="string">'micro'</span>)
+                        </div>
+
+                        <div class="quote-block">
+                            <div class="quote-title">💡 何时使用 F1</div>
+                            <p>当需要<span class="highlight">平衡精确率和召回率</span>时使用，特别是<span class="highlight-pink">类别不平衡</span>的数据集</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 平均准确率 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        平均准确率 Balanced Accuracy
+                        <span class="tag tag-key">不平衡数据</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>定义：</strong>对每个类别的召回率取<span class="highlight">平均</span>，解决类别不平衡问题</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心优势：</strong></p>
+                        <ul class="list-styled">
+                            <li>更关注<span class="highlight-pink">少数类</span>的表现</li>
+                            <li>提供更<span class="highlight-amber">公平</span>的评价标准</li>
+                            <li>适合<span class="highlight-purple">误分类成本不对称</span>的场景</li>
+                        </ul>
+
+                        <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> balanced_accuracy_score
+
+balanced_acc = balanced_accuracy_score(y_true, y_pred)
+<span class="function">print</span>(<span class="string">f"平均准确率: {balanced_acc:.2f}"</span>)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROC和AUC -->
+                <div class="card ml">
+                    <div class="card-title">
+                        ROC 曲线与 AUC
+                        <span class="tag tag-core">核心指标</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="nested-card">
+                            <div class="nested-card-title">📈 ROC 曲线</div>
+                            <p><strong>全称：</strong>Receiver Operating Characteristic Curve（受试者工作特征曲线）</p>
+                            <p style="margin-top:0.5rem;"><strong>纵轴：</strong>TPR（真正类比例）= TP/(TP+FN)</p>
+                            <p><strong>横轴：</strong>FPR（假正类比例）= FP/(FP+TN)</p>
+                            <p style="margin-top:0.5rem; color: var(--text-muted);">展示模型在不同阈值下的分类能力</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">📊 AUC</div>
+                            <p><strong>全称：</strong>Area Under the ROC Curve</p>
+                            <p><strong>定义：</strong>ROC曲线下的<span class="highlight">面积</span></p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>AUC 取值与含义：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>AUC值</th><th>含义</th></tr>
+                            <tr><td><span class="highlight-emerald">AUC = 1.0</span></td><td>完美分类</td></tr>
+                            <tr><td><span class="highlight">AUC = 0.9~1.0</span></td><td>优秀</td></tr>
+                            <tr><td><span class="highlight-amber">AUC = 0.7~0.9</span></td><td>良好</td></tr>
+                            <tr><td><span class="highlight-pink">AUC = 0.5</span></td><td>随机猜测（基准线）</td></tr>
+                            <tr><td><span class="highlight-red">AUC < 0.5</span></td><td>比随机猜测差</td></tr>
+                        </table>
+
+                        <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> roc_curve, auc
+
+<span class="comment"># roc_curve 返回 fpr, tpr, thresholds</span>
+fpr, tpr, thresholds = roc_curve(y_true, y_scores)
+roc_auc = auc(fpr, tpr)
+
+<span class="function">print</span>(<span class="string">f"AUC: {roc_auc:.2f}"</span>)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 回归评估 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        回归模型评估指标
+                        <span class="tag tag-core">核心指标</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span class="accordion-title">📊 MAE 平均绝对误差</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p><strong>公式：</strong><code style="color: var(--accent-cyan);">MAE = (1/n) × Σ|yᵢ - ŷᵢ|</code></p>
+                                    <p style="margin-top:0.5rem;"><strong>特点：</strong></p>
+                                    <ul class="list-styled">
+                                        <li>对异常值<span class="highlight-amber">不敏感</span></li>
+                                        <li>衡量预测值与真实值的<span class="highlight">平均绝对偏差</span></li>
+                                    </ul>
+                                    <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error
+mae = mean_absolute_error(y_true, y_pred)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span class="accordion-title">📊 MSE 均方误差</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p><strong>公式：</strong><code style="color: var(--accent-cyan);">MSE = (1/n) × Σ(yᵢ - ŷᵢ)²</code></p>
+                                    <p style="margin-top:0.5rem;"><strong>特点：</strong></p>
+                                    <ul class="list-styled">
+                                        <li>对离群值<span class="highlight-pink">比较敏感</span></li>
+                                        <li>MSE 越小，模型拟合效果越好</li>
+                                    </ul>
+                                    <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error
+mse = mean_squared_error(y_true, y_pred)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span class="accordion-title">📊 R² 决定系数</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p><strong>公式：</strong><code style="color: var(--accent-cyan);">R² = 1 - Σ(yᵢ - ŷᵢ)² / Σ(yᵢ - ȳ)²</code></p>
+                                    <p style="margin-top:0.5rem;"><strong>含义：</strong></p>
+                                    <table class="compare-table">
+                                        <tr><th>R²值</th><th>含义</th></tr>
+                                        <tr><td><span class="highlight-emerald">R² = 1</span></td><td>完美拟合</td></tr>
+                                        <tr><td><span class="highlight">R² = 0</span></td><td>无法解释任何变异</td></tr>
+                                        <tr><td><span class="highlight-pink">R² < 0</span></td><td>模型选择错误或特征不当</td></tr>
+                                    </table>
+                                    <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> r2_score
+r2 = r2_score(y_true, y_pred)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span class="accordion-title">📊 MAD 中值绝对误差</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p><strong>公式：</strong><code style="color: var(--accent-cyan);">MAD = median(|yᵢ - ŷᵢ|)</code></p>
+                                    <p style="margin-top:0.5rem;"><strong>适用：</strong>数据集中存在<span class="highlight-amber">大量异常值</span>的情况</p>
+                                    <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> median_absolute_error
+mad = median_absolute_error(y_true, y_pred)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 聚类评估 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        聚类模型评估
+                        <span class="tag tag-key">重点内容</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="nested-card">
+                            <div class="nested-card-title">🎯 轮廓系数 Silhouette Score</div>
+                            <p><strong>公式：</strong><code style="color: var(--accent-cyan);">s = (b - a) / max(a, b)</code></p>
+                            <p style="margin-top:0.5rem;"><strong>参数：</strong></p>
+                            <ul style="font-size: 0.85rem;">
+                                <li>a = 样本与同簇其他样本的平均距离</li>
+                                <li>b = 样本与最近簇中样本的平均距离</li>
+                            </ul>
+                            <p style="margin-top:0.75rem;"><strong>取值含义：</strong></p>
+                            <table class="compare-table">
+                                <tr><th>取值</th><th>含义</th></tr>
+                                <tr><td>接近 <span class="highlight-emerald">+1</span></td><td>聚类效果好，簇内紧密，簇间分离</td></tr>
+                                <tr><td>接近 <span class="highlight-amber">0</span></td><td>样本在两个或多个簇的边界上</td></tr>
+                                <tr><td>接近 <span class="highlight-pink">-1</span></td><td>样本可能被分配到错误的簇中</td></tr>
+                            </table>
+                            <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> silhouette_score
+silhouette = silhouette_score(X, labels)
+                            </div>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🎯 ARI 调整兰德指数</div>
+                            <p><strong>全称：</strong>Adjusted Rand Index</p>
+                            <p><strong>取值范围：</strong>[-1, 1]</p>
+                            <table class="compare-table">
+                                <tr><th>取值</th><th>含义</th></tr>
+                                <tr><td><span class="highlight-emerald">ARI = 1</span></td><td>两个聚类结果完全一致</td></tr>
+                                <tr><td><span class="highlight-amber">ARI ≈ 0</span></td><td>相似度不比随机分配更好</td></tr>
+                                <tr><td><span class="highlight-pink">ARI < 0</span></td><td>相似度低于随机预期</td></tr>
+                            </table>
+                            <div class="code-block">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> adjusted_rand_score
+ari = adjusted_rand_score(true_labels, predicted_labels)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- sklearn API -->
+                <div class="card ml">
+                    <div class="card-title">
+                        sklearn 核心 API
+                        <span class="tag tag-formula">必须掌握</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>核心方法：</strong></p>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">fit() - 训练模型</div>
+                            <p style="color: var(--text-muted);">接受训练数据，调整模型内部参数以优化目标函数</p>
+                            <div class="code-block">
+model.fit(X_train, y_train)
+                            </div>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">get_params() - 获取参数</div>
+                            <p style="color: var(--text-muted);">返回包含模型所有可配置参数及当前值的<span class="highlight-amber">字典</span></p>
+                            <div class="code-block">
+params = model.get_params()
+<span class="comment"># 调试、记录模型配置、网格搜索调优</span>
+                            </div>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">set_params() - 设置参数</div>
+                            <p style="color: var(--text-muted);">用于设置模型参数</p>
+                            <div class="code-block">
+model.set_params(**params)
+                            </div>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">score() - 评估模型</div>
+                            <p style="color: var(--text-muted);">返回模型评估分数</p>
+                            <div class="code-block">
+score = model.score(X_test, y_test)
+                            </div>
+                        </div>
+
+                        <div class="quote-block">
+                            <div class="quote-title">💡 优势</div>
+                            <p>sklearn 提供了一套<span class="highlight">统一且直观</span>的接口</p>
+                            <p>支持模型训练、参数获取、评估、设置</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据预处理 -->
+                <div class="card ml">
+                    <div class="card-title">
+                        数据预处理
+                        <span class="tag tag-def">基础概念</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="nested-card">
+                            <div class="nested-card-title">📏 标准化 Standardization</div>
+                            <p>将特征缩放到<span class="highlight">均值为0，方差为1</span>的标准正态分布</p>
+                            <p style="margin-top:0.5rem;"><strong>公式：</strong></p>
+                            <code style="color: var(--accent-emerald);">z = (x - μ) / σ</code>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">📐 归一化 Normalization</div>
+                            <p>将每个样本的数据点缩放到<span class="highlight-amber">单位范数</span>（长度为1）</p>
+                            <p style="margin-top:0.5rem;"><strong>公式：</strong></p>
+                            <code style="color: var(--accent-emerald);">x_norm = x / ||x||</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 第四章：数据处理 ==================== -->
+        <section id="data" class="chapter fade-in">
+            <div class="chapter-header">
+                <div class="chapter-icon data">💾</div>
+                <div>
+                    <h2 class="chapter-title data">第四章：数据处理流程</h2>
+                    <p class="chapter-subtitle">采集→清洗→标注→审核→质检→验收 | 文本/视觉/语音数据处理</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <!-- 数据处理流程 -->
+                <div class="card data">
+                    <div class="card-title">
+                        数据处理基本流程
+                        <span class="tag tag-core">核心框架</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>六步骤流程：</strong></p>
+                        <div class="flow-chart" style="flex-wrap: nowrap;">
+                            <span class="flow-node">①采集</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">②清洗</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">③标注</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">④审核</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">⑤质检</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">⑥验收</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">1. 数据采集</div>
+                            <p style="color: var(--text-muted);">从各种来源收集原始数据</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">2. 数据清洗</div>
+                            <p style="color: var(--text-muted);">处理缺失值、异常值、重复数据</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">3. 数据标注</div>
+                            <p style="color: var(--text-muted);">为数据添加标签（分类、检测、分割等）</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">4. 数据审核</div>
+                            <p style="color: var(--text-muted);">验证标注质量、一致性</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">5. 数据质检</div>
+                            <p style="color: var(--text-muted);">最终质量检查</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">6. 数据验收</div>
+                            <p style="color: var(--text-muted);">交付合格数据</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 文本数据 -->
+                <div class="card data">
+                    <div class="card-title">
+                        文本类数据处理
+                        <span class="tag tag-key">重点内容</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>数据类型：</strong></p>
+                        <ul class="list-styled">
+                            <li>数值型数据</li>
+                            <li>日期时间型数据</li>
+                            <li>逻辑型数据</li>
+                            <li>文本型数据（非结构化）</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>预处理流程：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">清洗</span>
+                            <span class="flow-node">分词</span>
+                            <span class="flow-node">去停用词</span>
+                            <span class="flow-node">词性标注</span>
+                            <span class="flow-node">实体识别</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>特征工程：</strong></p>
+                        <ul class="list-styled">
+                            <li>词频统计 (TF)</li>
+                            <li>逆文档频率 (IDF)</li>
+                            <li>词向量 (Word2Vec, BERT)</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>文本数据特点：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>特点</th><th>说明</th></tr>
+                            <tr><td>数据量大</td><td>以大规模形式存在</td></tr>
+                            <tr><td>高维稀疏性</td><td>维度高且分布稀疏</td></tr>
+                            <tr><td>非结构化</td><td>缺乏固定格式</td></tr>
+                            <tr><td>语义复杂性</td><td>含情感、上下文、隐含信息</td></tr>
+                        </table>
+
+                        <div class="divider"></div>
+
+                        <p><strong>应用场景：</strong></p>
+                        <p>舆情分析、智能客服、语义分析、机器翻译</p>
+                    </div>
+                </div>
+
+                <!-- 视觉数据 -->
+                <div class="card data">
+                    <div class="card-title">
+                        视觉类数据处理
+                        <span class="tag tag-key">重点内容</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>数据类型：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight">图像类</span> - 人脸、文字、商标、手写体等</li>
+                            <li><span class="highlight-amber">视频类</span> - 包含图像、语音、音乐、音效、文字</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>处理方法：</strong></p>
+                        <div class="nested-card">
+                            <div class="nested-card-title">🖼️ 图像处理</div>
+                            <ul class="list-styled">
+                                <li><strong>增强</strong> - 亮度、对比度调整</li>
+                                <li><strong>校正</strong> - 几何校正、畸变校正</li>
+                                <li><strong>裁剪</strong> - 去除无用区域</li>
+                                <li><strong>色彩调整</strong> - 白平衡、饱和度</li>
+                                <li><strong>模糊/锐化</strong> - 图像质量调整</li>
+                            </ul>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🎬 视频处理</div>
+                            <ul class="list-styled">
+                                <li><strong>分段</strong> - 按场景/时间切分</li>
+                                <li><strong>关键帧提取</strong> - 提取代表性帧</li>
+                                <li><strong>压缩</strong> - 视频编码压缩</li>
+                            </ul>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>客观审核指标：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>指标</th><th>全称</th><th>说明</th></tr>
+                            <tr><td><span class="highlight-amber">PSNR</span></td><td>峰值信噪比</td><td>值越大图像质量越好</td></tr>
+                            <tr><td><span class="highlight-pink">SSIM</span></td><td>结构相似度</td><td>评估压缩/去噪/增强效果</td></tr>
+                            <tr><td><span class="highlight-purple">VMAF</span></td><td>视频质量评价融合</td><td>深度学习方法的视频质量评分</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 语音数据 -->
+                <div class="card data">
+                    <div class="card-title">
+                        语音类数据处理
+                        <span class="tag tag-key">重点内容</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>语音数据特点：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight">交互性强</span> - 适合语音问答、智能助手</li>
+                            <li><span class="highlight-amber">获取实时便捷</span> - 智能设备随时采集</li>
+                            <li><span class="highlight-pink">兼容性强</span> - 多数设备支持</li>
+                            <li><span class="highlight-purple">不直观</span> - 需算法解析</li>
+                            <li><span class="highlight-emerald">失真风险</span> - 噪声、静音影响</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>预处理方法：</strong></p>
+                        <p>滤波、降噪、平滑、加重</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>语音段落切割规范：</strong></p>
+                        <ul class="list-styled">
+                            <li>以说话人<span class="highlight">整句话</span>为单位切割</li>
+                            <li>在语音波形图<span class="highlight-amber">最低点</span>设置边界</li>
+                            <li>不同说话人切割为<span class="highlight-pink">不同语音段</span></li>
+                            <li>保留 <span class="highlight-purple">2-3秒静音段</span></li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>有效语音判定：</strong></p>
+                        <ul class="list-styled">
+                            <li>规定之外的语言朗读</li>
+                            <li>纯噪声或静音</li>
+                            <li>声音极小无法听清</li>
+                            <li>语速过快或一字一顿</li>
+                            <li>存在切音、吞音、喷麦</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 数据标注类型 -->
+                <div class="card data">
+                    <div class="card-title">
+                        数据标注类型与规范
+                        <span class="tag tag-core">核心考点</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>文本标注类型：</strong></p>
+                        <ul class="list-styled">
+                            <li>序列标注</li>
+                            <li>关系标注</li>
+                            <li>属性标注</li>
+                            <li>类别标注</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>视觉标注类型：</strong></p>
+                        <div class="nested-card">
+                            <div class="nested-card-title">📍 关键点标注</div>
+                            <p style="color: var(--text-muted);">用于人体面部轮廓、五官、身体部位定位、情绪识别</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">📦 矩形框标注</div>
+                            <p style="color: var(--text-muted);">目标检测框标注，如自动驾驶中的车辆、行人</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🎯 区域标注</div>
+                            <p style="color: var(--text-muted);">图像分割，比矩形框更精确，可为多边形</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🏷️ 属性标注</div>
+                            <p style="color: var(--text-muted);">用标签标注目标属性，如商品种类</p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>标注通用规则：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>规则</th><th>说明</th></tr>
+                            <tr><td><span class="highlight-amber">贴边</span></td><td>标注框紧贴对象边缘</td></tr>
+                            <tr><td><span class="highlight-pink">独立</span></td><td>每个对象单独标注框</td></tr>
+                            <tr><td><span class="highlight-purple">不越界</span></td><td>标注框不能在图片边界</td></tr>
+                            <tr><td><span class="highlight-emerald">定特征</span></td><td>确定标注对象的共同特征</td></tr>
+                        </table>
+
+                        <div class="divider"></div>
+
+                        <p><strong>标注质量要求：</strong></p>
+                        <p>按100%准确率要求，标注像素点与标注物边缘像素点的误差应<span class="highlight-pink">在1个像素以内</span></p>
+                    </div>
+                </div>
+
+                <!-- 数据集格式 -->
+                <div class="card data">
+                    <div class="card-title">
+                        数据集格式与工具
+                        <span class="tag tag-def">基础内容</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>常见数据集格式：</strong></p>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">📄 VOC 格式</div>
+                            <p style="color: var(--accent-emerald);">XML 格式</p>
+                            <p>结构清晰，易于理解和解析</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">📋 COCO 格式</div>
+                            <p style="color: var(--accent-amber);">JSON 格式</p>
+                            <p>支持多种任务，文件结构紧凑</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">💾 TFRecord 格式</div>
+                            <p style="color: var(--accent-purple);">二进制格式</p>
+                            <p>读写速度快，适合大规模数据集</p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>数据清洗工具：</strong></p>
+                        <p>SmartBI、Excel、Python、VBA</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>数据标注工具：</strong></p>
+                        <p>CVAT、Labelme、LabelStudio</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>Doccano 特点：</strong></p>
+                        <ul class="list-styled">
+                            <li>开源文本标注工具</li>
+                            <li>支持文本分类、序列标注、序列到序列</li>
+                            <li>适用于情绪分析、命名实体识别、文本摘要</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 数据清洗质量 -->
+                <div class="card data">
+                    <div class="card-title">
+                        数据清洗质量评估
+                        <span class="tag tag-key">重要内容</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>五大评估指标：</strong></p>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">✅ 完整性</div>
+                            <p>数据完整，无缺失</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">✅ 准确性</div>
+                            <p>数据准确，不存在错误或异常</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">✅ 一致性</div>
+                            <p>不同业务流程中，数据必须保持格式一致</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">✅ 有效性</div>
+                            <p>数据取值必须在预定范围内</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">✅ 唯一性</div>
+                            <p>数据必须唯一，不存在完全重复的记录</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 第五章：业务流程 ==================== -->
+        <section id="biz" class="chapter fade-in">
+            <div class="chapter-header">
+                <div class="chapter-icon biz">🏢</div>
+                <div>
+                    <h2 class="chapter-title biz">第五章：业务流程分析</h2>
+                    <p class="chapter-subtitle">五要素、分析原则、分析方法、优化方法、业务数据特点</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <!-- 业务流程五要素 -->
+                <div class="card biz">
+                    <div class="card-title">
+                        业务流程五要素
+                        <span class="tag tag-core">核心考点</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="nested-card">
+                            <div class="nested-card-title">① 角色</div>
+                            <p style="color: var(--text-muted);">第一个基本要素，有了角色才有分工、有协作，才能完成特定的业务目标</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">② 活动</div>
+                            <p style="color: var(--text-muted);">指具体做的事，每个角色都有具体要做的事</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">③ 协作</div>
+                            <p style="color: var(--text-muted);">不同人做不同事，通过协作完成工作</p>
+                            <p style="margin-top:0.5rem;">协作方式：<span class="highlight-amber">并行</span> 和 <span class="highlight-pink">串行</span></p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">④ 产出物</div>
+                            <p style="color: var(--text-muted);">具体活动的结果，使不同活动在不同岗位之间的转手和交接成为可能</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">⑤ 规则</div>
+                            <p style="color: var(--text-muted);">活动的内容、方式、责任等有明确的安排和界定</p>
+                        </div>
+
+                        <div class="quote-block">
+                            <div class="quote-title">💡 流程定义</div>
+                            <p>流程是指由<span class="highlight">两个及两个以上</span>的环节完成一个完整行为的过程</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 业务流程分析原则 -->
+                <div class="card biz">
+                    <div class="card-title">
+                        业务流程分析原则
+                        <span class="tag tag-key">重要内容</span>
+                    </div>
+                    <div class="card-content">
+                        <ol class="progress-list">
+                            <li><strong>深入了解业务需求原则</strong><br><span style="color: var(--text-muted);">确定最佳的训练流程</span></li>
+
+                            <li><strong>数据采集和准备原则</strong><br><span style="color: var(--text-muted);">获取足够数量、高质量的数据</span></li>
+
+                            <li><strong>合理选择算法原则</strong><br><span style="color: var(--text-muted);">算法选择是核心步骤</span></li>
+
+                            <li><strong>高质量模型优化原则</strong><br><span style="color: var(--text-muted);">人工智能项目的重要环节</span></li>
+
+                            <li><strong>模型部署和监控原则</strong><br><span style="color: var(--text-muted);">涉及发布、集成测试、监控</span></li>
+
+                            <li><strong>不断迭代优化原则</strong><br><span style="color: var(--text-muted);">改善数据集、模型调参、算法优化</span></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- 业务流程分析方法 -->
+                <div class="card biz">
+                    <div class="card-title">
+                        业务流程分析方法
+                        <span class="tag tag-key">重要内容</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="nested-card">
+                            <div class="nested-card-title">1️⃣ 价值链分析法</div>
+                            <p>通过价值分析找到<span class="highlight">增值活动</span>与<span class="highlight-pink">非增值活动</span></p>
+                            <p style="margin-top:0.5rem;"><strong>目标：</strong></p>
+                            <ul class="list-styled">
+                                <li>消除和精简非增值活动</li>
+                                <li>强化增值活动</li>
+                                <li>形成企业竞争优势</li>
+                            </ul>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">2️⃣ 客户关系分析法</div>
+                            <p>对企业的客户进行分析，以及关系维护和发展</p>
+                            <p style="margin-top:0.5rem;"><strong>核心方法：</strong></p>
+                            <ul class="list-styled">
+                                <li>结合数据挖掘</li>
+                                <li>从客户画像和行为数据中挖掘</li>
+                                <li>发现隐含的、先前未知的、对决策有极大价值的信息</li>
+                            </ul>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">3️⃣ 业务场景分析法</div>
+                            <p>通过流程拆解、流程分析、业务梳理帮助确定清晰目标</p>
+                            <p style="margin-top:0.5rem;"><strong>核心问题：</strong>明确"建立人工智能系统需要解决什么问题"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 业务流程优化方法 -->
+                <div class="card biz">
+                    <div class="card-title">
+                        业务流程优化方法
+                        <span class="tag tag-key">重要内容</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="nested-card">
+                            <div class="nested-card-title">🔧 智能系统改造法</div>
+                            <p style="color: var(--text-muted);">以现有业务流程为基础</p>
+                            <p style="margin-top:0.5rem;"><strong>主要活动：</strong></p>
+                            <ul class="list-styled">
+                                <li>冗余消除</li>
+                                <li>功能整合</li>
+                                <li>功能拆分</li>
+                            </ul>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🔄 全新设计法</div>
+                            <p style="color: var(--text-muted);">从业务流程要得到的结果出发</p>
+                            <p style="margin-top:0.5rem;"><strong>特点：</strong></p>
+                            <ul class="list-styled">
+                                <li>从零开始设计新的业务流程</li>
+                                <li>适用于<span class="highlight-pink">环境剧变</span>时</li>
+                            </ul>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>智能决策方法：</strong></p>
+                        <p>利用数据智能支持决策制定，通过收集和分析数据，利用机器学习算法提供决策方案推荐</p>
+                    </div>
+                </div>
+
+                <!-- 业务数据特点 -->
+                <div class="card biz">
+                    <div class="card-title">
+                        业务数据特点
+                        <span class="tag tag-def">定义理解</span>
+                    </div>
+                    <div class="card-content">
+                        <table class="compare-table">
+                            <tr><th>特点</th><th>说明</th><th>处理要点</th></tr>
+                            <tr><td><span class="highlight-amber">广泛性</span></td><td>来源广泛，格式差异</td><td>数据集成和清洗</td></tr>
+                            <tr><td><span class="highlight-pink">海量性</span></td><td>大规模数据集</td><td>分布式计算存储</td></tr>
+                            <tr><td><span class="highlight-purple">不均衡性</span></td><td>错误、重复、缺失</td><td>数据清洗验证</td></tr>
+                            <tr><td><span class="highlight-emerald">时序性</span></td><td>包含时间戳</td><td>时间序列分析</td></tr>
+                            <tr><td><span class="highlight">复杂性</span></td><td>结构化/半结构化/非结构化</td><td>不同技术处理</td></tr>
+                            <tr><td><span class="highlight-pink">价值性</span></td><td>洞察业务、优化决策</td><td>数据分析挖掘</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 数据审核要点 -->
+                <div class="card biz">
+                    <div class="card-title">
+                        数据审核要点
+                        <span class="tag tag-core">核心内容</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>审核内容：</strong></p>
+                        <ul class="list-styled">
+                            <li>数据数量审核</li>
+                            <li>数据质量审核</li>
+                            <li>经验审核</li>
+                            <li>逻辑性审核</li>
+                            <li>数据与业务关联度审核</li>
+                            <li>数据指标审核</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>审核目的：</strong></p>
+                        <div class="quote-block">
+                            <div class="quote-title">核心目标</div>
+                            <p>全面验证数据处理结果的质量，包括数据的<span class="highlight">完整性、准确性、一致性与唯一性</span></p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>审核要点：</strong></p>
+                        <ol class="progress-list">
+                            <li>明确审核目的，选择匹配的审核策略和标准</li>
+                            <li>关注业务流程和规则，审核完整性、准确性、一致性、唯一性</li>
+                            <li>选择熟悉业务的专业人员，设计全面系统的审核流程</li>
+                            <li>利用业务数据质量检测工具，记录审核过程并持续优化</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 第六章：Python ==================== -->
+        <section id="python" class="chapter fade-in">
+            <div class="chapter-header">
+                <div class="chapter-icon py">🐍</div>
+                <div>
+                    <h2 class="chapter-title py">第六章：Python 与 AI 框架</h2>
+                    <p class="chapter-subtitle">Python特点、PyTorch、深度学习平台、优化策略、超参数优化</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <!-- Python特点 -->
+                <div class="card py">
+                    <div class="card-title">
+                        Python 语言特点
+                        <span class="tag tag-def">基础内容</span>
+                    </div>
+                    <div class="card-content">
+                        <ul class="list-styled">
+                            <li><span class="highlight">简单易学</span> - 语法简洁，专注于解决问题</li>
+                            <li><span class="highlight-amber">开源免费</span> - FLOSS，自由使用和分发</li>
+                            <li><span class="highlight-pink">高级语言</span> - 无需关注底层细节</li>
+                            <li><span class="highlight-purple">可移植性</span> - Linux、Windows、FreeBSD等</li>
+                            <li><span class="highlight-emerald">面向对象</span> - 支持面向过程和面向对象</li>
+                            <li><span class="highlight">可扩展性</span> - 可用C/C++编写关键代码</li>
+                            <li><span class="highlight-amber">可嵌入性</span> - 可嵌入到其他程序</li>
+                            <li><span class="highlight-pink">丰富的库</span> - 标准库+第三方库</li>
+                            <li><span class="highlight-purple">强制缩进</span> - 代码具有极佳可读性</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- PyTorch -->
+                <div class="card py">
+                    <div class="card-title">
+                        PyTorch 框架
+                        <span class="tag tag-core">核心框架</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>动态图 vs 静态图：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>类型</th><th>特点</th></tr>
+                            <tr><td><span class="highlight-amber">动态图</span></td><td>即时执行，运行时动态构建和修改，调试方便</td></tr>
+                            <tr><td><span class="highlight-pink">静态图</span></td><td>预定义编译，运行前确定，适合优化</td></tr>
+                        </table>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心优势：</strong></p>
+                        <ul class="list-styled">
+                            <li>动态图机制 - 灵活构建计算图</li>
+                            <li><span class="highlight-emerald">自动微分</span> - 自动计算梯度</li>
+                            <li>Python 风格 API - 易于集成</li>
+                            <li><span class="highlight-purple">GPU 加速</span> - CUDA 支持</li>
+                            <li>活跃社区</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心模块：</strong></p>
+                        <div class="nested-card">
+                            <div class="nested-card-title">torch</div>
+                            <p>基础模块：张量操作、自动微分、优化器</p>
+                        </div>
+                        <div class="nested-card">
+                            <div class="nested-card-title">torch.nn</div>
+                            <p>神经网络组件：层、损失函数、激活函数</p>
+                        </div>
+                        <div class="nested-card">
+                            <div class="nested-card-title">torch.optim</div>
+                            <p>优化算法：SGD、Adam、RMSprop</p>
+                        </div>
+                        <div class="nested-card">
+                            <div class="nested-card-title">torch.utils</div>
+                            <p>辅助工具：数据加载、模型保存</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 深度学习平台 -->
+                <div class="card py">
+                    <div class="card-title">
+                        深度学习平台
+                        <span class="tag tag-def">基础概念</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>深度学习平台 = 完整的深度学习开发和部署环境</strong></p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>平台功能：</strong></p>
+                        <ul class="list-styled">
+                            <li>快速构建和部署深度学习模型</li>
+                            <li>自动化调参</li>
+                            <li>模型优化</li>
+                            <li>分布式训练</li>
+                            <li>多种框架和算法库集成</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>主流平台：</strong></p>
+                        <div class="nested-card">
+                            <div class="nested-card-title">🟠 PaddlePaddle</div>
+                            <p>百度开发的开源深度学习平台</p>
+                        </div>
+                        <div class="nested-card">
+                            <div class="nested-card-title">🔵 MindSpore</div>
+                            <p>华为开发的自研平台</p>
+                            <ul style="font-size: 0.85rem;">
+                                <li>图算法和动态图混合</li>
+                                <li>支持静态图或动态图</li>
+                                <li>Ascend AI 处理器</li>
+                                <li>高性能计算能力</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 优化策略 -->
+                <div class="card py">
+                    <div class="card-title">
+                        模型优化策略
+                        <span class="tag tag-key">重要内容</span>
+                    </div>
+                    <div class="card-content">
+                        <ol class="progress-list">
+                            <li><strong>选择合适的算法</strong><br><span style="color: var(--text-muted);">根据问题特点选择</span></li>
+
+                            <li><strong>数据预处理</strong><br><span style="color: var(--text-muted);">标准化、归一化、特征工程</span></li>
+
+                            <li><strong>数据集划分</strong><br><span style="color: var(--text-muted);">训练集、验证集、测试集</span></li>
+
+                            <li><strong>调整超参数</strong><br><span style="color: var(--text-muted);">学习率、批量大小等</span></li>
+
+                            <li><strong>正则化</strong><br><span style="color: var(--text-muted);">避免过拟合</span></li>
+
+                            <li><strong>整合 ensembles</strong><br><span style="color: var(--text-muted);">多模型组合改善性能</span></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- 归一化方法 -->
+                <div class="card py">
+                    <div class="card-title">
+                        归一化方法
+                        <span class="tag tag-formula">公式汇总</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="nested-card">
+                            <div class="nested-card-title">BN 批量归一化</div>
+                            <p style="color: var(--accent-emerald);">Batch Normalization</p>
+                            <p>对批量数据进行归一化，加速训练</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">LN 层归一化</div>
+                            <p style="color: var(--accent-amber);">Layer Normalization</p>
+                            <p>对单个样本的所有层进行归一化</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">WN 权重归一化</div>
+                            <p style="color: var(--accent-purple);">Weight Normalization</p>
+                            <p>对网络权重进行归一化</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">LRN 局部响应归一化</div>
+                            <p style="color: var(--accent-pink);">Local Response Normalization</p>
+                            <p>对局部响应进行归一化</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 超参数优化 -->
+                <div class="card py">
+                    <div class="card-title">
+                        超参数优化方法
+                        <span class="tag tag-key">重要内容</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="nested-card">
+                            <div class="nested-card-title">🔲 网格搜索</div>
+                            <p>穷举所有参数组合</p>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">缺点：维度灾难</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🎲 随机搜索</div>
+                            <p>随机采样参数组合</p>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">通常比网格搜索更高效</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">📈 贝叶斯优化</div>
+                            <p>基于概率模型选择参数</p>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">高效利用历史信息</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">🧠 神经架构搜索</div>
+                            <p>AutoML，自动搜索网络架构</p>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">计算成本高</p>
+                        </div>
+
+                        <div class="nested-card">
+                            <div class="nested-card-title">⚡ 动态资源分配</div>
+                            <p>根据进度动态分配计算资源</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图像增强 -->
+                <div class="card py">
+                    <div class="card-title">
+                        图像数据增强
+                        <span class="tag tag-key">重要方法</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>核心思想：</strong>通过算法对图像进行转变，引入噪声来<span class="highlight">增加数据多样性</span></p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>增强方法：</strong></p>
+                        <table class="compare-table">
+                            <tr><th>方法</th><th>说明</th></tr>
+                            <tr><td><span class="highlight-amber">旋转 Rotation</span></td><td>按顺时针或逆时针随机旋转一定角度</td></tr>
+                            <tr><td><span class="highlight-pink">翻转 Flip</span></td><td>沿水平或垂直方向翻转</td></tr>
+                            <tr><td><span class="highlight-purple">缩放 Zoom</span></td><td>放大或缩小一定比例</td></tr>
+                            <tr><td><span class="highlight-emerald">平移 Shift</span></td><td>沿水平或垂直方向平移</td></tr>
+                            <tr><td><span class="highlight">加噪声 Noise</span></td><td>加入随机噪声</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- AI算法测试流程 -->
+                <div class="card py">
+                    <div class="card-title">
+                        AI 算法测试流程
+                        <span class="tag tag-core">核心流程</span>
+                    </div>
+                    <div class="card-content">
+                        <ol class="progress-list">
+                            <li><strong>明确测试需求</strong><br>
+                                <span style="color: var(--text-muted);">测试目的、数据要求、时间节点</span>
+                            </li>
+
+                            <li><strong>编写测试方案</strong><br>
+                                <span style="color: var(--text-muted);">主要场景、数据量、评价指标</span>
+                            </li>
+
+                            <li><strong>编写数据方案</strong><br>
+                                <span style="color: var(--text-muted);">采集场所、设备、指标范围、处理方法</span>
+                            </li>
+
+                            <li><strong>执行算法测试</strong><br>
+                                <span style="color: var(--text-muted);">测试脚本、badcase分析</span>
+                            </li>
+
+                            <li><strong>编写测试报告</strong><br>
+                                <span style="color: var(--text-muted);">算法介绍、数据描述、功能/性能分析</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 附录：智能系统 ==================== -->
+        <section class="chapter fade-in">
+            <div class="chapter-header">
+                <div class="chapter-icon ai">🎯</div>
+                <div>
+                    <h2 class="chapter-title ai">附录：智能产品与系统</h2>
+                    <p class="chapter-subtitle">智能产品设计步骤、智能交互场景、智慧医疗、智能客服、自动驾驶</p>
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <!-- 智能产品设计 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        智能产品设计步骤
+                        <span class="tag tag-core">核心框架</span>
+                    </div>
+                    <div class="card-content">
+                        <ol class="progress-list">
+                            <li><strong>明确商业目标</strong></li>
+                            <li><strong>收集相关数据</strong></li>
+                            <li><strong>清洗和预处理</strong></li>
+                            <li><strong>选择适当算法</strong></li>
+                            <li><strong>训练模型</strong></li>
+                            <li><strong>测试并优化</strong></li>
+                            <li><strong>部署到产品</strong></li>
+                            <li><strong>监视并调整</strong></li>
+                        </ol>
+
+                        <div class="quote-block">
+                            <div class="quote-title">💡 关键点</div>
+                            <p>AI产品成功的关键往往不在于使用了多先进的技术，而在于<span class="highlight">抓住了用户痛点</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 智能客服 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        智能客服系统
+                        <span class="tag tag-key">重点场景</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>文字交互流程：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">用户输入</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">语义理解</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">知识库检索</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">回答生成</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">自我学习</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>加入语音：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">语音识别</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">语义理解</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">...</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>核心技术：</strong></p>
+                        <ul class="list-styled">
+                            <li>NLP 语义理解</li>
+                            <li>知识库构建</li>
+                            <li>问答匹配</li>
+                            <li>机器人深度学习</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 自动驾驶 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        自动驾驶系统
+                        <span class="tag tag-core">核心框架</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>典型流程：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">环境感知</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">数据融合</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">决策判断</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">控制执行</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>多模块协同：</strong></p>
+                        <p>视觉识别 + 路径规划 + 紧急制动</p>
+
+                        <div class="divider"></div>
+
+                        <p><strong>复杂度体现：</strong></p>
+                        <ul class="list-styled">
+                            <li>实时处理<span class="highlight-amber">多源异构数据</span></li>
+                            <li>复杂路况下的<span class="highlight-pink">应急决策</span></li>
+                            <li><span class="highlight-purple">车路协同</span>通信保障</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 智慧医疗 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        智慧医疗系统
+                        <span class="tag tag-def">定义理解</span>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>组成三部分：</strong></p>
+                        <div class="flow-chart">
+                            <span class="flow-node">智慧医院系统</span>
+                            <span class="flow-node">区域卫生系统</span>
+                            <span class="flow-node">家庭健康系统</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>多模态智能模块：</strong></p>
+                        <ul class="list-styled">
+                            <li>图像识别</li>
+                            <li>生理信号判别</li>
+                            <li>数据挖掘</li>
+                            <li>智能控制</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 智能交互业务 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        智能交互业务场景
+                        <span class="tag tag-def">应用分类</span>
+                    </div>
+                    <div class="card-content">
+                        <ul class="list-styled">
+                            <li>图像或语音识别</li>
+                            <li>体态判别</li>
+                            <li>外文翻译</li>
+                            <li>智能客服</li>
+                            <li>机器人操控</li>
+                            <li>网络社交</li>
+                            <li>智能安防</li>
+                        </ul>
+
+                        <div class="divider"></div>
+
+                        <p><strong>交互式AI系统分类：</strong></p>
+                        <ul class="list-styled">
+                            <li>泛问答系统</li>
+                            <li>任务/目标型对话系统</li>
+                            <li>开放领域的闲聊系统</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 大型综合场景 -->
+                <div class="card ai">
+                    <div class="card-title">
+                        大型综合性应用场景
+                        <span class="tag tag-def">应用场景</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="flow-chart">
+                            <span class="flow-node">智慧园区</span>
+                            <span class="flow-node">智慧交通</span>
+                            <span class="flow-node">智慧道路规划</span>
+                            <span class="flow-node">智能安保</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <p><strong>自动化流程设计方法优势：</strong></p>
+                        <ul class="list-styled">
+                            <li><span class="highlight-emerald">效率高</span></li>
+                            <li><span class="highlight-amber">成本低</span></li>
+                            <li><span class="highlight-purple">准确度高</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>AI 知识 Wiki 详尽版 | 基于《人工智能算法、技术及应用》整理</p>
+        <p style="margin-top:0.5rem;">包含详细定义、公式、代码示例、对比分析 | 助您全面掌握核心知识点</p>
+    </footer>
+
+    <script>
+        function toggleAccordion(header) {
+            const accordion = header.parentElement;
+            accordion.classList.toggle('active');
+        }
+
+        function switchTab(button, tabId) {
+            const container = button.closest('.card-content');
+            container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            button.classList.add('active');
+            container.querySelector('#' + tabId).classList.add('active');
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

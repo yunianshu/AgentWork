@@ -7,6 +7,9 @@ const PORT = 3000;
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve data directory files
+app.use('/data', express.static(path.join(__dirname, 'data')));
+
 // Serve questions.json
 app.get('/questions.json', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');

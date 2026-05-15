@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>题库答案修正报告</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+  }
+  .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  .header h1 { font-size: 28px; margin-bottom: 10px; }
+  .header .subtitle { opacity: 0.9; font-size: 14px; }
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 25px 20px;
+    background: white;
+    border-bottom: 1px solid #e8e8e8;
+    flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #667eea;
+  }
+  .stat-label { font-size: 13px; color: #888; margin-top: 4px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 30px 0 15px;
+    padding-left: 12px;
+    border-left: 4px solid #667eea;
+  }
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 6px 16px;
+    border: 1px solid #d9d9d9;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: #667eea; color: #667eea; }
+  .filter-btn.active { background: #667eea; color: white; border-color: #667eea; }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .q-number {
+    background: #667eea;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+  .q-type {
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 4px;
+    background: #f0f0f0;
+    color: #666;
+  }
+  .q-type.judge { background: #e6f7ff; color: #1890ff; }
+  .q-type.single { background: #f6ffed; color: #52c41a; }
+  .q-type.multi { background: #fff7e6; color: #fa8c16; }
+  .q-content {
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: #333;
+    line-height: 1.7;
+  }
+  .options-list {
+    margin: 10px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .options-list li {
+    padding: 4px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  .options-list li .opt-label {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 50%;
+    background: #f0f0f0;
+    font-size: 12px;
+    margin-right: 8px;
+    font-weight: 600;
+  }
+  .options-list li .opt-label.correct {
+    background: #52c41a;
+    color: white;
+  }
+  .answer-change {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 8px;
+  }
+  .answer-old, .answer-new {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 6px;
+  }
+  .answer-old {
+    background: #fff1f0;
+    color: #cf1322;
+    text-decoration: line-through;
+  }
+  .answer-new {
+    background: #f6ffed;
+    color: #389e0d;
+  }
+  .arrow {
+    font-size: 18px;
+    color: #999;
+  }
+  .similarity {
+    margin-left: auto;
+    font-size: 12px;
+    color: #999;
+  }
+  .added-badge {
+    background: #52c41a;
+    color: white;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: auto;
+  }
+  .hidden { display: none; }
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>题库答案修正报告</h1>
+  <div class="subtitle">基于 MD 源文件对比，修正 JSON 题库中的错误答案</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-value" id="stat-changes">0</div>
+    <div class="stat-label">答案修正</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value" id="stat-added">0</div>
+    <div class="stat-label">新增题目</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value" id="stat-judge">0</div>
+    <div class="stat-label">判断题修正</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value" id="stat-single">0</div>
+    <div class="stat-label">单选题修正</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value" id="stat-multi">0</div>
+    <div class="stat-label">不定项修正</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section-title">答案修正对比</div>
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all" onclick="filter('all')">全部</button>
+    <button class="filter-btn" data-filter="判断题" onclick="filter('判断题')">判断题</button>
+    <button class="filter-btn" data-filter="单选题" onclick="filter('单选题')">单选题</button>
+    <button class="filter-btn" data-filter="不定项选择题" onclick="filter('不定项选择题')">不定项选择题</button>
+  </div>
+  <div id="changes-list"></div>
+
+  <div class="section-title">新增题目</div>
+  <div id="added-list"></div>
+</div>
+
+<div class="footer">生成时间：2026-05-15 | 数据来源：理论900道押题_整理版.md</div>
+
+<script>
+// 修正数据
+const changesData = [
+{num:1,type:"判断题",content:"欧式距离是计算欧氏空间中两点之间的距离( )。",options:["正确","错误"],old:"A",new:"B"},
+{num:15,type:"判断题",content:"表输入可以随机生成不同类型的随机数 ( )。",options:["正确","错误"],old:"B",new:"A"},
+{num:27,type:"判断题",content:"数据平滑是指去除数据中的噪声 ( )。",options:["正确","错误"],old:"A",new:"B"},
+{num:29,type:"判断题",content:"分箱前需要对记录集按照目标属性值的大小进行排序( )。",options:["正确","错误"],old:"B",new:"A"},
+{num:33,type:"判断题",content:"常用的文本标注工具有NotePad、NotePad++、pilotEdit等( )。",options:["正确","错误"],old:"B",new:"A"},
+{num:37,type:"判断题",content:"中文分词的质量标准是标注好的分词与词典中的词语一致，不存在歧义( )。",options:["正确","错误"],old:"B",new:"A"},
+{num:60,type:"判断题",content:"所有的人工智能系统都需要大量的数据来进行训练和学习( )。",options:["正确","错误"],old:"B",new:"A"},
+{num:92,type:"判断题",content:"《中华人民共和国知识产权法》不保护未注册的商标( )。",options:["正确","错误"],old:"A",new:"B"},
+{num:102,type:"不定项选择题",content:"常用的语音处理工具包括（ ）。",options:["A. Protools","B. Logic","C. Adobe Audition","D. Matlab","E. GoldWare"],old:"A B C D E",new:"ABCE"},
+{num:103,type:"不定项选择题",content:"文本标注的现实应用场景主要包括文本的（ ）。",options:["A. 实体标注","B. 情感标注","C. 敏感信息标注","D. 相似性判断标注","E. 因果标注"],old:"A B C D E",new:"ABCD"},
+{num:105,type:"不定项选择题",content:"视频标注源视频做结构化处理，包括（ ）。",options:["A. 镜头检测","B. 图像分切","C. 分割","D. 噪音处理","E. 关键帧提取"],old:"A B C E",new:"ACE"},
+{num:107,type:"不定项选择题",content:"文本数据标注在生活中的应用比较广泛，主要包括（ ）。",options:["A. 客服领域","B. 金融领域","C. 医疗领域","D. 教育领域","E. 司法领域"],old:"A B D",new:"AB"},
+{num:108,type:"不定项选择题",content:"主要的语音数据标注工具有（ ）。",options:["A. PRAAT","B. Transcriber","C. EasyAlign","D. Windows Media","E. Video Studio"],old:"A D E",new:"ABC"},
+{num:110,type:"不定项选择题",content:"下面对CSV格式的文件叙述正确的是（ ）。",options:["A. CSV文件由任意数目的记录组成","B. CSV文件记录间以换行符分隔","C. CSV文件是纯文本格式","D. 读取CSV文件只能通过Excel打开"],old:"A B C D",new:"ABCDE"},
+{num:111,type:"不定项选择题",content:"下列选项中，不属于新的职业道德观念的核心理念是（ ）。",options:["A. 义利并重的经济效益观念","B. 公平竞争的信用经济观念","C. 学习创新的观念","D. 职业道德的独立观念","E. 社会责任感"],old:"D E",new:"CDE"},
+{num:114,type:"不定项选择题",content:"以下哪些选项是网关的基本功能（ ）。",options:["A. 协议转换","B. 流量管理","C. IP数据包转发","D. 安全控制","E. 网段划分"],old:"A E",new:"AC"},
+{num:117,type:"不定项选择题",content:"以下关于DNS服务器表述不正确的是（ ）。",options:["A. DNS服务器能将域名翻译成IP地址","B. DNS服务器能将IP地址翻译成域名","C. DNS服务器不能实现域名与IP地址的转换","D. DNS服务器能将域名翻译成MAC地址","E. DNS服务器能将MAC地址翻译成域名"],old:"A B C E",new:"ABCDE"},
+{num:120,type:"不定项选择题",content:"计算机硬件系统是由以下哪些部件构成（ ）。",options:["A. 输入设备","B. 运算器","C. 控制器","D. 存储器","E. 输出设备"],old:"B D E",new:"DE"},
+{num:125,type:"不定项选择题",content:"以下哪些选项是插补缺失值的常用方法（ ）。",options:["A. 线性插值","B. 多项式插值","C. 样条插值","D. 均值插值","E. 中位数插值"],old:"A C D",new:"AC"},
+{num:126,type:"不定项选择题",content:"以下哪些方法可以用来识别可能代表噪声的离群点（ ）。",options:["A. 聚类","B. 回归","C. 等深分箱法","D. 最近邻法","E. 等宽分箱法"],old:"A B E",new:"AB"},
+{num:132,type:"不定项选择题",content:"下列选项属于图像识别技术的应用的是（ ）。",options:["A. 人脸识别","B. 自动驾驶汽车识别","C. 图像分类","D. 行为识别","E. 图像语义分割"],old:"A B D",new:"ACD"},
+{num:138,type:"不定项选择题",content:"在Windows操作系统中，哪些操作可以提升计算机的运行速度？（ ）",options:["A. 卸载不常用的软件","B. 定期清理磁盘碎片","C. 升级内存（RAM）","D. 禁用不必要的启动项","E. 安装更多的字体文件"],old:"A C D",new:"AD"},
+{num:140,type:"不定项选择题",content:"以下属于AI测试工具的是？（ ）",options:["A. Test.ai","B. Applitools","C. Functionize","D. Selenium","E. Postman"],old:"B C E",new:"ABCE"},
+{num:143,type:"不定项选择题",content:"算法训练工具中，哪些操作属于模型评估阶段？（ ）",options:["A. 计算准确率","B. 计算召回率","C. 计算F1分数","D. 调整超参数","E. 混淆矩阵分析"],old:"A B C D E",new:"ACDE"},
+{num:147,type:"不定项选择题",content:"在算法训练中，为了提升模型的泛化能力，可以采取哪些策略？（ ）",options:["A. 增加数据量","B. 数据增强","C. 正则化","D. 集成学习","E. 减少数据量"],old:"A B C D E",new:"AB"},
+{num:149,type:"不定项选择题",content:"人工智能训练师如何利用AI技术优化业务分析过程？（ ）",options:["A. 使用AI进行自动化数据收集","B. 利用AI进行数据清洗和预处理","C. 应用AI进行模式识别和趋势预测","D. 通过AI生成业务洞察报告","E. 利用AI进行手动数据录入"],old:"A B C D E",new:"ACD"},
+{num:154,type:"不定项选择题",content:"在设计单一产品智能解决方案时，人工智能训练师需要考虑哪些方面的需求分析？（ ）。",options:["A. 目标用户群体的特征和需求","B. 产品的核心功能与差异化优势","C. 竞争对手的智能解决方案特点","D. 技术实现的可行性和成本效益","E. 产品的外观设计和颜色搭配"],old:"A B C D E",new:"ADE"},
+{num:156,type:"不定项选择题",content:"在业务分析中，哪些指标可以用来衡量用户参与度？（ ）。",options:["A. 页面浏览量","B. 用户停留时间","C. 用户留存率","D. 点击率","E. 用户转化率"],old:"A B C D E",new:"ACD"},
+{num:161,type:"不定项选择题",content:"在处理复杂业务场景时，以下哪些方法是有效的？（ ）",options:["A. 流程图绘制","B. 案例分析","C. 角色扮演","D. 数据模拟","E. 专家咨询"],old:"A C D",new:"ABCD"},
+{num:162,type:"不定项选择题",content:"人工智能训练师在进行业务分析时，应关注哪些数据来源？（ ）",options:["A. 内部业务数据","B. 外部市场数据","C. 用户行为数据","D. 社交媒体数据","E. 竞争对手的财务报表"],old:"A C",new:"ACE"},
+{num:170,type:"不定项选择题",content:"自然语言处理（NLP）在哪些领域有广泛应用？（ ）",options:["A. 机器翻译","B. 情感分析","C. 语音识别","D. 文本分类","E. 信息抽取"],old:"A B C D",new:"ABCDE"},
+{num:173,type:"不定项选择题",content:"在机器学习中，哪些算法可以用于分类任务？（ ）",options:["A. 决策树","B. 随机森林","C. 支持向量机","D. K均值聚类","E. 线性回归"],old:"A B",new:"ABC"},
+{num:174,type:"不定项选择题",content:"在深度学习中，哪些技术可以提高模型的泛化能力？（ ）",options:["A. 数据增强","B. 正则化","C. 批归一化","D. 使用更深的网络","E. 减少训练数据"],old:"B",new:"AB"},
+{num:175,type:"不定项选择题",content:"在设计智能推荐系统时，需要考虑哪些因素？（ ）",options:["A. 用户偏好","B. 物品属性","C. 上下文信息","D. 推荐算法的多样性","E. 推荐的实时性"],old:"C D",new:"ABCD"},
+{num:176,type:"不定项选择题",content:"在智能系统设计中，哪些原则是需要遵循的？（ ）",options:["A. 用户中心设计","B. 系统可扩展性","C. 数据安全性","D. 算法透明性","E. 界面美观性"],old:"A B C D",new:"ABCE"},
+{num:179,type:"不定项选择题",content:"在人机交互设计中，哪些原则有助于提升用户体验？（ ）",options:["A. 一致性","B. 简洁性","C. 反馈性","D. 容错性","E. 个性化"],old:"A C E",new:"ACDE"},
+{num:180,type:"不定项选择题",content:"在数据分析中，哪些方法可以用来处理缺失数据？（ ）",options:["A. 删除缺失记录","B. 均值填充","C. 中位数填充","D. 回归填充","E. 插值法"],old:"A B C D",new:"ABD"},
+{num:183,type:"不定项选择题",content:"在推荐系统中，哪些算法是常用的？（ ）",options:["A. 协同过滤","B. 基于内容的推荐","C. 矩阵分解","D. 深度学习推荐","E. 随机推荐"],old:"B D E",new:"ABCD"},
+{num:186,type:"不定项选择题",content:"在智能训练中，数据标注的质量控制包括哪些方面？（ ）",options:["A. 标注一致性","B. 标注准确性","C. 标注完整性","D. 标注时效性","E. 标注美观性"],old:"A B D",new:"ABCD"},
+{num:187,type:"不定项选择题",content:"在数据预处理中，哪些技术可以用来降低数据维度？（ ）",options:["A. 主成分分析","B. 线性判别分析","C. t-SNE","D. 特征选择","E. 数据标准化"],old:"A B D",new:"AD"},
+{num:188,type:"不定项选择题",content:"在深度学习中，哪些优化器是常用的？（ ）",options:["A. SGD","B. Adam","C. RMSprop","D. Adagrad","E. L-BFGS"],old:"A B C D",new:"ACD"},
+{num:189,type:"不定项选择题",content:"在自然语言处理中，哪些任务是常见的？（ ）",options:["A. 词性标注","B. 命名实体识别","C. 句法分析","D. 语义分析","E. 文本生成"],old:"B C D",new:"ABD"},
+{num:190,type:"不定项选择题",content:"在机器学习中，哪些方法可以用来处理类别不平衡问题？（ ）",options:["A. 过采样","B. 欠采样","C. SMOTE","D. 代价敏感学习","E. 调整类别权重"],old:"B C E",new:"ABCE"},
+{num:195,type:"不定项选择题",content:"在计算机视觉中，哪些任务属于目标检测的范畴？（ ）",options:["A. 人脸检测","B. 车辆检测","C. 行人检测","D. 图像分类","E. 语义分割"],old:"A B C D",new:"ABC"},
+{num:197,type:"不定项选择题",content:"在数据分析中，哪些图表适合展示时间序列数据？（ ）",options:["A. 折线图","B. 柱状图","C. 面积图","D. 散点图","E. 热力图"],old:"A B C D",new:"ABC"},
+{num:198,type:"不定项选择题",content:"在智能系统中，哪些技术可以用来保护用户隐私？（ ）",options:["A. 数据脱敏","B. 差分隐私","C. 同态加密","D. 联邦学习","E. 数据加密"],old:"A B C",new:"ABCD"},
+{num:199,type:"不定项选择题",content:"在人机交互设计中，哪些方法可以用来评估用户体验？（ ）",options:["A. 可用性测试","B. A/B测试","C. 问卷调查","D. 用户访谈","E. 眼动追踪"],old:"A B C D E",new:"ABCD"},
+{num:206,type:"单选题",content:"计算机网络的主要功能目的是实现计算机之间的资源共享，以下选项不属于资源共享的是（ ）。",options:["A. 打印机共享","B. 硬件资源共享","C. 软件资源共享","D. 数据资源贡献"],old:"D",new:"A"},
+{num:211,type:"单选题",content:"以下哪个不是监督学习算法（ ）。",options:["A. 决策树","B. 支持向量机","C. K-Means","D. DBSCAN"],old:"C",new:"B"},
+{num:228,type:"单选题",content:"ETL数据整合的主流工具Kettle对数据库的影响为（ ）。",options:["A. 对数据库无侵入性","B. 存在一定侵入性","C. 源端数据库需预留额外存储空间","D. 存在严重侵入性"],old:"A",new:"B"},
+{num:240,type:"单选题",content:"在数据预处理过程中，对缺失值的处理方法不正确的是（ ）。",options:["A. 删除当前字段","B. 同类均值插补","C. 极大似然估计","D. 均值插补"],old:"C",new:"A"},
+{num:264,type:"单选题",content:"下列选项中，不属于数据标注的特点的是（ ）。",options:["A. 数据标注的内容颗粒度小","B. 数据标注规则复杂","C. 数据标注需求迭代快","D. 数据标注需求的量大"],old:"A",new:"B"},
+{num:280,type:"单选题",content:"算法制定测试计划的目的是为测试的各项活动制定一个（ ）、综合的计划，包括每项测试活动的对象、范围、方法、进度和预期结果。",options:["A. 系统的","B. 独立的","C. 可行的","D. 相关的"],old:"A",new:"C"},
+{num:332,type:"单选题",content:"特征提取强调通过（ ）的方式得到一组具有明显物理或统计意义的特征。",options:["A. 映射","B. 组合","C. 变换","D. 变换或映射"],old:"D",new:"C"},
+{num:334,type:"单选题",content:"研究某些变量之间是否存在一定的相关性需要采用以下哪种方法（ ）。",options:["A. 因果分析","B. 相关分析","C. 回归分析","D. 预测分析"],old:"C",new:"B"},
+{num:465,type:"单选题",content:"在智能家居系统的设计中，以下哪项不是常用的通信协议（ ）",options:["A. Wi-Fi","B. Zigbee","C. Bluetooth","D. HTTP"],old:"D",new:"B"},
+{num:482,type:"单选题",content:"企业职工具有良好的职业道德，可以在促进企业发展方面起到（ ）的作用。",options:["A. 增强竞争力","B. 促进决策科学化","C. 决定经济效益","D. 树立员工守业意识"],old:"D",new:"A"},
+{num:595,type:"单选题",content:"在数据分析中，以下哪种方法属于高阶聚类分析技术，能够处理复杂的非线性关系？( )",options:["A. K-Means","B. 层次聚类","C. DBSCAN","D. 谱聚类"],old:"D",new:"C"},
+{num:796,type:"单选题",content:"使用AdaGrad算法时，学习率如何变化？( )",options:["A. 减小","B. 增大","C. 先增大后减小","D. 先减小后增大"],old:"A",new:"B"},
+{num:900,type:"不定项选择题",content:"下列关于团结互助、加强协作，正确的表述是",options:["A. 正确看待道德与法治","B. 正确处理竞争与合作的关系","C. 正确处理主要矛盾与次要矛盾的关系","D. 正确处理国家集体与个体的关系","E. 合作友爱"],old:"B E",new:"B"}
+];
+
+const addedData = [
+{num:901,type:"单选题",content:"在训练智能客服系统时，以下哪项不是处理过拟合问题的常用方法",options:["A. 减少模型的复杂度","B. 增加训练数据的多样性","C. 使用早停法","D. 增加模型的训练时间"],answer:"D"},
+{num:902,type:"单选题",content:"在智能客服系统的训练中，以下哪项不是关键步骤",options:["A. 数据收集与预处理","B. 模型选择与训练","C. 系统部署与监控","D. 用户界面美化"],answer:"D"},
+{num:903,type:"单选题",content:"使用AdaGrad算法时，学习率如何变化？",options:["A. 减小","B. 增大","C. 先增大后减小","D. 先减小后增大"],answer:"A"},
+{num:904,type:"单选题",content:"在设计智能系统的日志系统时，重要的是要记录",options:["A. 用户的个人信息","B. 系统操作的关键事件和结果","C. 实时数据流中的每个数据点","D. 系统内部的算法细节"],answer:"B"},
+{num:905,type:"不定项选择题",content:"遵章守法，恪尽职守的行为包括哪些？",options:["A. 遵守行业法规","B. 逃避责任","C. 忠诚于职位","D. 超时工作而不报告","E. 徇私舞弊"],answer:"AC"},
+{num:906,type:"不定项选择题",content:"在算法训练中，为了提升模型的泛化能力，可以采取哪些策略？",options:["A. 增加数据量","B. 数据增强","C. 正则化","D. 集成学习","E. 减少数据量"],answer:"ABCD"},
+{num:907,type:"不定项选择题",content:"下列关于团结互助、加强协作，正确的表述是。",options:["A. 正确看待道德与法治","B. 正确处理竞争与合作的关系","C. 正确处理主要矛盾与次要矛盾的关系","D. 正确处理国家集体与个体的关系","E. 合作友爱"],answer:"ABCD"},
+{num:908,type:"不定项选择题",content:"《中华人民共和国劳动法》规定，加班费的支付标准包括哪些？",options:["A. 法定工作日加班","B. 休息日加班","C. 法定节假日加班","D. 夜间加班","E. 居家办公"],answer:"ABC"}
+];
+
+function getTypeClass(t) {
+  if (t === '判断题') return 'judge';
+  if (t === '单选题') return 'single';
+  return 'multi';
+}
+
+function getTypeLabel(t) {
+  if (t === '判断题') return '判断题';
+  if (t === '单选题') return '单选题';
+  return '不定项';
+}
+
+function renderChangeCard(item) {
+  const typeCls = getTypeClass(item.type);
+  const typeLbl = getTypeLabel(item.type);
+
+  let optionsHtml = '';
+  if (item.options && item.options.length > 0) {
+    const labels = ['A','B','C','D','E','F'];
+    optionsHtml = '<ul class="options-list">' + item.options.map((opt, i) => {
+      const label = labels[i] || String.fromCharCode(65+i);
+      return '<li><span class="opt-label">' + label + '</span>' + opt + '</li>';
+    }).join('') + '</ul>';
+  }
+
+  return '<div class="card" data-type="' + item.type + '">' +
+    '<div class="card-header">' +
+      '<span class="q-number">Q' + item.num + '</span>' +
+      '<span class="q-type ' + typeCls + '">' + typeLbl + '</span>' +
+    '</div>' +
+    '<div class="q-content">' + item.content + '</div>' +
+    optionsHtml +
+    '<div class="answer-change">' +
+      '<span class="answer-old">' + item.old + '</span>' +
+      '<span class="arrow">&#8594;</span>' +
+      '<span class="answer-new">' + item.new + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderAddedCard(item) {
+  const typeCls = getTypeClass(item.type);
+  const typeLbl = getTypeLabel(item.type);
+  const labels = ['A','B','C','D','E','F'];
+  const optionsHtml = '<ul class="options-list">' + item.options.map((opt, i) => {
+    const label = labels[i] || String.fromCharCode(65+i);
+    const isCorrect = item.answer.includes(label);
+    return '<li><span class="opt-label ' + (isCorrect ? 'correct' : '') + '">' + label + '</span>' + opt + '</li>';
+  }).join('') + '</ul>';
+
+  return '<div class="card">' +
+    '<div class="card-header">' +
+      '<span class="q-number">Q' + item.num + '</span>' +
+      '<span class="q-type ' + typeCls + '">' + typeLbl + '</span>' +
+      '<span class="added-badge">新增</span>' +
+    '</div>' +
+    '<div class="q-content">' + item.content + '</div>' +
+    optionsHtml +
+    '<div class="answer-change">' +
+      '<span class="answer-new">答案：' + item.answer + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function updateStats() {
+  document.getElementById('stat-changes').textContent = changesData.length;
+  document.getElementById('stat-added').textContent = addedData.length;
+  document.getElementById('stat-judge').textContent = changesData.filter(c => c.type === '判断题').length;
+  document.getElementById('stat-single').textContent = changesData.filter(c => c.type === '单选题').length;
+  document.getElementById('stat-multi').textContent = changesData.filter(c => c.type === '不定项选择题').length;
+}
+
+function renderAll() {
+  const changesList = document.getElementById('changes-list');
+  const addedList = document.getElementById('added-list');
+
+  changesList.innerHTML = changesData.map(renderChangeCard).join('');
+  addedList.innerHTML = addedData.map(renderAddedCard).join('');
+}
+
+function filter(type) {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === type);
+  });
+
+  const cards = document.querySelectorAll('#changes-list .card');
+  cards.forEach(card => {
+    if (type === 'all' || card.dataset.type === type) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+updateStats();
+renderAll();
+</script>
+
+</body>
+</html>

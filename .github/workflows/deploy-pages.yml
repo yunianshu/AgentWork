@@ -1,0 +1,48 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v4
+
+      - name: 生成 Pages 静态产物
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site/data
+          cp quiz-app/public/index.html _site/index.html
+          cp quiz-app/data/questions.json _site/data/questions.json
+          cp quiz-app/data/changes_report.html _site/data/changes_report.html
+          cp quiz-app/data/knowledge-wiki-detailed.html _site/data/knowledge-wiki-detailed.html
+
+      - name: 配置 GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 上传 Pages 产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: 发布到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
