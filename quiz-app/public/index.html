@@ -728,6 +728,8 @@
         questions.push(...data.questions);
         totalQuestions = questions.length;
         updateTotalDisplay();
+        updateStats();
+        updateUI();
         renderQuestion(currentQuestion);
       } catch (error) {
         console.error('Failed to load questions:', error);
