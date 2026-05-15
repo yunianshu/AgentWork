@@ -583,7 +583,7 @@
     <!-- Header -->
     <div class="header">
       <h1>📝 智能训练题库</h1>
-      <div class="subtitle">小鹅通练习答题 · 共900题</div>
+      <div class="subtitle" id="subtitle">小鹅通练习答题 · 共<span id="totalCount">900</span>题</div>
       <div class="stats-bar">
         <div class="stat-item">
           <span class="stat-label">已答</span>
@@ -680,6 +680,7 @@
 
     // Current state
     let currentQuestion = 1;
+    let totalQuestions = 900;
     let currentMode = 'practice';
     let selectedOptions = [];  // Array for multi-select
     let isAnswered = false;
@@ -725,6 +726,8 @@
         const data = await response.json();
         questions.length = 0;
         questions.push(...data.questions);
+        totalQuestions = questions.length;
+        updateTotalDisplay();
         renderQuestion(currentQuestion);
       } catch (error) {
         console.error('Failed to load questions:', error);
@@ -911,18 +914,24 @@
       answeredCountEl.textContent = answered;
       correctCountEl.textContent = correct;
       accuracyEl.textContent = accuracy + '%';
-      progressEl.textContent = `${answered}/900`;
-      progressBar.style.width = (answered / 900 * 100) + '%';
+      progressEl.textContent = `${answered}/${totalQuestions}`;
+      progressBar.style.width = (answered / totalQuestions * 100) + '%';
+    }
+
+    // Update total display
+    function updateTotalDisplay() {
+      document.getElementById('totalCount').textContent = totalQuestions;
+      jumpInput.max = totalQuestions;
     }
 
     // Update UI based on state
     function updateUI() {
       // Page info
-      pageInfo.textContent = `第 ${currentQuestion} / 900 题`;
+      pageInfo.textContent = `第 ${currentQuestion} / ${totalQuestions} 题`;
 
       // Navigation buttons
       prevBtn.disabled = currentQuestion <= 1;
-      nextBtn.disabled = currentQuestion >= 900;
+      nextBtn.disabled = currentQuestion >= totalQuestions;
 
       // Submit/Next buttons
       submitBtn.disabled = selectedOptions.length === 0 || isAnswered;
@@ -944,7 +953,7 @@
     // Render answer grid
     function renderAnswerGrid() {
       let itemsHtml = '';
-      for (let i = 1; i <= 900; i++) {
+      for (let i = 1; i <= totalQuestions; i++) {
         const answered = userProgress.answered.has(i);
         const isCorrect = userProgress.correct[i];
         const isCurrent = i === currentQuestion;
@@ -960,7 +969,7 @@
 
       questionCard.innerHTML = `
         <div class="answer-grid">
-          <div class="answer-grid-title">答题卡（共900题）</div>
+          <div class="answer-grid-title">答题卡（共<span class="grid-total">${totalQuestions}</span>题）</div>
           <div class="answer-grid-list">${itemsHtml}</div>
         </div>
       `;
@@ -979,7 +988,7 @@
 
     // Go to question
     function goToQuestion(num) {
-      if (num < 1 || num > 900) return;
+      if (num < 1 || num > totalQuestions) return;
       currentQuestion = num;
       const answered = userProgress.answers[num];
       selectedOptions = answered ? (Array.isArray(answered) ? answered : [answered]) : [];
@@ -998,7 +1007,7 @@
 
     // Next question
     function nextQuestion() {
-      if (currentQuestion < 900) {
+      if (currentQuestion < totalQuestions) {
         goToQuestion(currentQuestion + 1);
       }
     }
@@ -1018,7 +1027,7 @@
 
     jumpBtn.addEventListener('click', () => {
       const num = parseInt(jumpInput.value);
-      if (num >= 1 && num <= 900) {
+      if (num >= 1 && num <= totalQuestions) {
         goToQuestion(num);
         jumpInput.value = '';
       }
@@ -1052,7 +1061,7 @@
       const status = statusFilter.value;
 
       // Find first matching question
-      for (let i = 1; i <= 900; i++) {
+      for (let i = 1; i <= totalQuestions; i++) {
         const q = questions.find(q => q.number === i);
         if (!q) continue;
 
