@@ -593,8 +593,8 @@
       <div class="header-top">
         <h1>📝 智能训练题库</h1>
         <div class="header-links">
-          <a href="./data/changes_report.html" class="link-btn" target="_blank">📊 答案修正报告</a>
-          <a href="./data/knowledge-wiki-detailed.html" class="link-btn" target="_blank">📚 知识百科</a>
+          <a href="../data/changes_report.html" class="link-btn" target="_blank">📊 答案修正报告</a>
+          <a href="../data/knowledge-wiki-detailed.html" class="link-btn" target="_blank">📚 知识百科</a>
         </div>
       </div>
       <div class="subtitle" id="subtitle">小鹅通练习答题 · 共<span id="totalCount">900</span>题</div>
@@ -721,7 +721,7 @@
     // 从唯一题库源加载题目；file:// 页面需通过本地服务读取数据
     async function loadQuestions() {
       try {
-        let questionsUrl = './questions.json';
+        let questionsUrl = './data/questions.json';
         if (window.location.protocol === 'file:') {
           questionsUrl = 'http://localhost:3000/questions.json';
         } else if (window.location.pathname.includes('/quiz-app/public/')) {
